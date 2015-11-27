@@ -41,8 +41,56 @@
 
 \pagebreak
 
-\section{...}
+\section{Partie théorique: Calcul du gradient pour l’optimisation des paramètres d'un réseau de neurones}
 
+\subsection{Exercice a)}
 
+b est de dimension $d_{h}$
+
+Le vecteur d'activation est : $h_{a} = W^{(1)}x +b$
+
+Avec $ h_{a_i} = W^{(1)}_{i1} x_{1}  W^{(1)}_{i2} x_{2} + ... + W^{(1)}_{id} x_{d} b_{i}$
+
+Et $h_{s_i} = h_{a_i}*I_{ \{ h_{a_i} > 0 \} } = max(h_{a_i}, 0)$
+
+\subsection{Exercice b)}
+
+$W^{(2)}$ est de dimension $m x d_{h}$
+
+$b^{(2)}$ est de dimension $m$
+
+Le vecteur d'activation est : $o^{a} = W^{(2)} h_{s} + b^{(2)}$
+
+Avec $o^{a}_{k} = W^{(2)}_{k1} h_{s_1} + W^{(2)}_{k2} h_{s_2} + ... + W^{(2)}_{kn} h_{s_n} + b^{(2)}_{k}$
+
+\subsection{Exercice c)}
+
+$o^{s} = softmax(o^{a}) = \frac{1}{\sum_{i=1}^{n} e^{o^{a}_{i}}}  (e^{o^{a}_{1}}, e^{o^{a}_{2}}, ..., e^{o^{a}_{n}})$
+
+Donc $o^{s}_{k} = \frac{e^{o^{a}_{k}}}{\sum_{i=1}^{n} e^{o^{a}_{i}}}$
+
+$e^{x} : \mathds{R} \rightarrow \mathds{R}^{+}$ donc la somme au numérateur de la fonction ci-dessus sera positive et la somme au numérateur aussi. Une fraction de deux nombres positifs sera toujours positif donc $o^{s}_{k}$ est toujours positif.
+
+$\sum^{n}_{i=1} o^{s}_{i} = \sum^{n}_{i=1} \frac{e^{o^{a}_{i}}}{\sum_{j=1}^{n} e^{o^{a}_{j}}}$
+
+$ = \frac{1}{\sum_{j=1}^{n} e^{o^{a}_{j}}} \sum^{n}_{i=1} e^{o^{a}_{i}}$
+
+$ = \frac{\sum^{n}_{i=1} e^{o^{a}_{i}}}{\sum_{j=1}^{n} e^{o^{a}_{j}}}$
+
+$ =1 $
+
+\todo{verifier l'explication}
+
+C'est important car cela signifie que les sorties sont les probabilité pour l'entrée d'être une classe et ces classes sont mutuellement exclusives.
+ 
+\subsection{Exercice d)}
+
+$ L(x,y) = -log  o^{s}_{y}(x) $
+
+$= -log \frac{e^{o^{a}_{y}(x)}}{\sum_{i=1}^{n} e^{o^{a}_{i}(x)}}$ 
+
+$= -log(e^{o^{a}_{y}(x)}) +log(\sum_{i=1}^{n} e^{o^{a}_{o}(x)})  $
+
+$ = -o^{a}_{y}(x) + log(\sum_{i=1}^{n} e^{o^{a}_{i}(x)})$ 
 
 \end{document}
