@@ -164,7 +164,31 @@ La dimension de :
 
 \subsection{Exercice o)}
 
+Pour $b^{(1)}$ :
+
+$\frac{\partial L}{\partial b^{(1)}_{k}} = \frac{\partial L}{\partial h^{a}_{k}} \frac{\partial h^{a}_{k}}{\partial b^{(1)}_{k}}$
+
+$ = \frac{\partial L}{\partial h^{a}_{k}} \frac{\partial \sum_{j'} W^{(1)}_{kj'} x_{j} + b^{(1)}_{k}}{\partial b^{1}_{k}}$
+
+$ = \frac{\partial L}{\partial h^{a}_{k}}$
+
+Pour $W^{(1)}$ :
+
+$\frac{\partial L}{\partial W^{(1)}_{kj}} = \frac{\partial L}{\partial h^{a}_{k}} \frac{\partial h^{a}_{k}}{\partial W^{(1)}_{kj}} $
+
+$ = \frac{\partial L}{\partial h^{a}_{k}} \frac{\partial \sum_{j'} W^{(1)}_{kj'} x_{j} + b^{(1)}_{k}}{\partial W^{(1)}_{kj}}$
+
+$ = \frac{\partial L}{\partial h^{a}_{k}} x_{j} $
+
+
 \subsection{Exercice p)}
+
+La dimension de :
+\begin{itemize}
+	\item $\frac{\partial L}{\partial b^{1}}$ est $d_{h}$
+	\item $\frac{\partial L}{\partial W^{(1)}}$ est $d_{h} \times n$ car  $\frac{\partial L}{\partial h^{(a)}}$ est $d_{h} \times 1$ et $ x $ est $1 \times n$
+\end{itemize}
+
 
 \subsection{Exercice q)}
 
