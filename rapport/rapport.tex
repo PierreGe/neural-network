@@ -43,6 +43,14 @@
 
 \section{Partie théorique: Calcul du gradient pour l’optimisation des paramètres d'un réseau de neurones}
 
+Commençons par dessiner un rapide schéma du réseau de neurones étudié.
+
+\begin{figure}[H]
+	\includegraphics[width=12cm]{reseau.jpg}
+	\centering
+	\label{fig:comp}
+\end{figure}
+
 \subsection{Exercice a)}
 
 b est de dimension $d_{h}$
@@ -94,6 +102,21 @@ $ = -o^{a}_{y}(x) + log(\sum_{i=1}^{m} e^{o^{a}_{i}(x)})$
 
 \subsection{Exercice e)} 
 
+L'erreur empirique vaut :
+
+$\widehat{R}(f,D) = \sum_{i=1}^{n} L(x,y)$
+
+\todo{demander en tp des précisions sur la notation ci-dessus}
+
+Les paramètres sont :
+
+$ \theta = \{ W^{(1)},W^{(2)},b^{(1)},b^{(2)} \}$ avec $W^{(1)}$ et $b^{(1)}$ représentant les connexions synaptiques entre l'entrée et la couche cachée et $W^{(2)}$ et $b^{(2)}$ représentant les connexions synaptiques entre la couche cachée et la sortie.
+
+Le problèmes d'optimisation revient donc à l'équation suivante :
+
+$\theta^{*} = argmin_{\theta} \widehat{R}(f,D) $
+
+Les dimensions sont :
 
 $n_{\theta}$ est de dimension $d_{h} \times d + d_{h} + m \times d_{h} + m$
 
@@ -129,8 +152,13 @@ Réponse entière donnée
 
 \subsection{Exercice j)} 
 
-Dimension $m$ pour le premier $ m \times d_{h}$ pour le deuxième.
-\todo{Préciser les autres valeurs}
+La dimension de :
+\begin{itemize}
+	\item $\frac{\partial L}{\partial b^{(2)}}$ est $m$
+	\item $\frac{\partial L}{\partial W^{(2)}}$ est $ m \times d_{h}$
+	\item $\frac{\partial L}{\partial o^{a}}$ est $ m \times 1$
+	\item $h^{s^T}$ est $ 1 \times d_{h}$
+\end{itemize}
 
 \begin{verbatim}
 	grad_b2 = grad_oa
