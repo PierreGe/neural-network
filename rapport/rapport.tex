@@ -168,7 +168,7 @@ $\frac{\partial L}{\partial {O^a_k}} = \frac{1}{\sum_{i=1}^{m} e^{O^a_i(x)}} (e^
 
 \begin{verbatim}
 	import numpy as np
-	grad_oa = 1/np.sum(e_oa) * np.array(e_oa)
+	grad_oa = 1/np.sum(e_oa) * np.array(e_oa)   # avec e_oa correspondant à np.exp(oa)
 	grad_oa[y] = grad_oa[y] - 1  #onehot
 \end{verbatim}
 
@@ -240,7 +240,7 @@ $\frac{\partial L}{\partial h^a} = \begin{bmatrix}
 
 
 \begin{verbatim}
-	(a + np.abs(a))/2  # astuce pour garder que les nombre positif
+	grad_ha = (grad_hs + np.abs(grad_hs))/2  # astuce pour garder que les nombre positif
 \end{verbatim}
 
 
@@ -277,10 +277,13 @@ La dimension de :
 	\item $\frac{\partial L}{\partial W^{(1)}}$ est $d_{h} \times n$ car  $\frac{\partial L}{\partial h^{(a)}}$ est $d_{h} \times 1$ et $ x $ est $1 \times n$
 \end{itemize}
 
-\todo{Expression numpy?}
+\begin{verbatim}
+	grad_b1 = grad_ha
+	grad_w1 = grad_ha * np.transpose(x)
+\end{verbatim}
+
 
 \subsection{Exercice q)}
-\todo{À valider!}
 
 $\frac{\partial L}{\partial x_j} = \sum_{k=1}^{n} \frac{\partial L}{\partial h_k^a} \frac{\partial h_a^k}{\partial x_j}$
 
@@ -291,6 +294,8 @@ $ = \sum_{k=1}^{n} \frac{\partial L}{\partial h_k^a} W^{(1)}_{kj} x_{j}$
 Sous forme matricielle, on obtient:
 
 $\frac{\partial L}{\partial x} = {W^{(1)}}^T \frac{\partial L}{\partial h^a}$
+
+\todo{validation: ca semble correcte}
 
 
 \subsection{Exercice r)}
