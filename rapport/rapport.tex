@@ -74,17 +74,17 @@ Avec $o^{a}_{k} = W^{(2)}_{k1} h_{s_1} + W^{(2)}_{k2} h_{s_2} + ... + W^{(2)}_{k
 \subsection{Exercice c)}
 
 $o^{s} = softmax(o^{a}) = \frac{1}{\sum_{i=1}^{m} e^{o^{a}_{i}}}  (e^{o^{a}_{1}}, e^{o^{a}_{2}}, ..., e^{o^{a}_{n}})$
-
+\\[6pt]
 Donc $o^{s}_{k} = \frac{e^{o^{a}_{k}}}{\sum_{i=1}^{m} e^{o^{a}_{i}}}$
-
+\\[6pt]
 $e^{x} : \mathds{R} \rightarrow \mathds{R}^{+}$ donc la somme au numérateur de la fonction ci-dessus sera positive et la somme au numérateur aussi. Une fraction de deux nombres positifs sera toujours positif donc $o^{s}_{k}$ est toujours positif.
-
+\\[6pt]
 $\sum^{m}_{i=1} o^{s}_{i} = \sum^{m}_{i=1} \frac{e^{o^{a}_{i}}}{\sum_{j=1}^{m} e^{o^{a}_{j}}}$
-
+\\[6pt]
 $ = \frac{1}{\sum_{j=1}^{m} e^{o^{a}_{j}}} \sum^{m}_{i=1} e^{o^{a}_{i}}$
-
+\\[6pt]
 $ = \frac{\sum^{m}_{i=1} e^{o^{a}_{i}}}{\sum_{j=1}^{m} e^{o^{a}_{j}}}$
-
+\\[6pt]
 $ =1 $
 
 
@@ -93,11 +93,11 @@ C'est important car cela signifie que les sorties sont les probabilité pour l'e
 \subsection{Exercice d)}
 
 $ L(x,y) = -log  (o^{s}_{y}(x)) $
-
+\\[6pt]
 $= -log \frac{e^{o^{a}_{y}(x)}}{\sum_{i=1}^{m} e^{o^{a}_{i}(x)}}$ 
-
+\\[6pt]
 $= -log(e^{o^{a}_{y}(x)}) +log(\sum_{i=1}^{m} e^{o^{a}_{o}(x)})  $
-
+\\[6pt]
 $ = -o^{a}_{y}(x) + log(\sum_{i=1}^{m} e^{o^{a}_{i}(x)})$
 
 \subsection{Exercice e)} 
@@ -138,29 +138,28 @@ $n_{\theta}$ est de dimension $d_{h} \times d + d_{h} + m \times d_{h} + m$
 .		theta = theta + learningRate*gradient()
 \end{verbatim}
 \subsection{Exercice g)}
-\todo{Comment ajouter de l'espace entre les lignes pour que ce soit plus lisible?}
 Pour $k \neq y$:
 
 $\frac{\partial L}{\partial {O^a_k}} = \frac{\partial}{\partial O^a_k} ( -O^a_y (x)+ log \sum_{i=1}^{m} e^{O^a_i(x)})$
-
+\\[6pt]
 $= 0 + \frac{\partial}{\partial O^a_k} log \sum_{i=1}^{m} e^{O^a_i(x)}$
-
+\\[6pt]
 $= \frac{\frac{\partial}{\partial O^a_k} \sum_{i=1}^{m} e^{O^a_i(x)}}{\sum_{i=1}^{m} e^{O^a_i(x)}}$
-
+\\[6pt]
 $= \frac{\frac{\partial}{\partial O^a_k} e^{O^a_k(x)}}{\sum_{i=1}^{m} e^{O^a_i(x)}}$
-
+\\[6pt]
 $= \frac{e^{O^a_k(x)}}{\sum_{i=1}^{m} e^{O^a_i(x)}}$
-
+\\[10pt]
 Pour $k=y$:
-
+\\[6pt]
 $\frac{\partial L}{\partial {O^a_y}} = \frac{\partial}{\partial O^a_y} ( -O^a_y (x)+ log \sum_{i=1}^{m} e^{O^a_i(x)})$
-
+\\[6pt]
 $= \frac{-\partial O^a_y}{\partial O^a_y} + \frac{\partial}{\partial O^a_y} log \sum_{i=1}^{m} e^{O^a_i(x)}$
-
+\\[6pt]
 $= -1+\frac{e^{O^a_y(x)}}{\sum_{i=1}^{m} e^{O^a_i(x)}}$
-
+\\[6pt]
 Le premier terme du résultat vaut donc $-1$ seulement lorsque $k=y$ et 0 sinon. On obtient alors:
-
+\\[6pt]
 $\frac{\partial L}{\partial {O^a_k}} = \frac{1}{\sum_{i=1}^{m} e^{O^a_i(x)}} (e^{O^a_1(x), e^{O^a_2(x)}, ..., e^{O^a_m(x)}}- onehot_m(y)) = O^s - onehot_m(y)$
 
 \subsection{Exercice h)}
@@ -208,9 +207,15 @@ La dimension de :
 
 \subsection{Exercice m)}
 
-\todo{formatter acollade}
-
-$\frac{\partial rect(z)}{\partial z} = \frac{\partial max(0,z)}{\partial z} = \lbrace {0 si z \leq 0 \\ 1 sinon}$
+$\frac{\partial rect(z)}{\partial z} = \frac{\partial max(0,z)}{\partial z} = $ 
+\[ 
+\left \{
+  \begin{tabular}{c}
+  $0$ si $z \leq 0$ \\
+  $1$ sinon \\
+  \end{tabular}
+\right.
+\]
 
 Pour $h^a_j \leq 0$:
 
@@ -221,9 +226,15 @@ Pour $h^a_j > 0$:
 $\frac{\partial L}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j} \frac{\partial h^s_j}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j} \frac{\partial rect(h^a_j)}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j}*1 = \frac{\partial L}{\partial h^s_j}$
 
 Au final:
-\todo{formatter acollade}
 
-$\frac{\partial L}{\partial h^a_j} = \lbrace 0 si h^a_j \leq 0 \frac{\partial L}{\partial h^s_j} sinon$
+$\frac{\partial L}{\partial h^a_j} =$
+\[  \left \{
+  \begin{tabular}{c}
+  $ 0$ si $h^a_j \leq 0$ \\
+  $\frac{\partial L}{\partial h^s_j}$ sinon \\
+  \end{tabular}
+\right.
+\]
 
 $\frac{\partial L}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j} * I_{\lbrace h^a_j > 0 \rbrace} $
 
@@ -295,9 +306,8 @@ Sous forme matricielle, on obtient:
 
 $\frac{\partial L}{\partial x} = {W^{(1)}}^T \frac{\partial L}{\partial h^a}$
 
-\todo{validation: ca semble correcte}
-
-
 \subsection{Exercice r)}
+
+
 
 \end{document}
