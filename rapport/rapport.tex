@@ -168,7 +168,7 @@ $\frac{\partial L}{\partial {O^a_k}} = \frac{1}{\sum_{i=1}^{m} e^{O^a_i(x)}} (e^
 
 \begin{verbatim}
 	import numpy as np
-	grad_oa = 1/np.sum(e_oa) * np.array(e_oa)   # avec e_oa correspondant à np.exp(oa)
+	grad_oa = os   # avec os les sorties
 	grad_oa[y] = grad_oa[y] - 1  #onehot
 \end{verbatim}
 
