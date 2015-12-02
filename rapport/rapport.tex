@@ -83,9 +83,7 @@ $\sum^{m}_{i=1} o^{s}_{i} = \sum^{m}_{i=1} \frac{e^{o^{a}_{i}}}{\sum_{j=1}^{m} e
 \\[6pt]
 $ = \frac{1}{\sum_{j=1}^{m} e^{o^{a}_{j}}} \sum^{m}_{i=1} e^{o^{a}_{i}}$
 \\[6pt]
-$ = \frac{\sum^{m}_{i=1} e^{o^{a}_{i}}}{\sum_{j=1}^{m} e^{o^{a}_{j}}}$
-\\[6pt]
-$ =1 $
+$ = \frac{\sum^{m}_{i=1} e^{o^{a}_{i}}}{\sum_{j=1}^{m} e^{o^{a}_{j}}}=1$
 
 
 C'est important car cela signifie que les sorties sont les probabilité pour l'entrée d'être d'une certaine classe et ces classes sont mutuellement exclusives.
@@ -96,7 +94,7 @@ $ L(x,y) = -log  (o^{s}_{y}(x)) $
 \\[6pt]
 $= -log \frac{e^{o^{a}_{y}(x)}}{\sum_{i=1}^{m} e^{o^{a}_{i}(x)}}$ 
 \\[6pt]
-$= -log(e^{o^{a}_{y}(x)}) +log(\sum_{i=1}^{m} e^{o^{a}_{o}(x)})  $
+$= -log(e^{o^{a}_{y}(x)}) +log(\sum_{i=1}^{m} e^{o^{a}_{i}(x)})  $
 \\[6pt]
 $ = -o^{a}_{y}(x) + log(\sum_{i=1}^{m} e^{o^{a}_{i}(x)})$
 
@@ -139,7 +137,7 @@ $n_{\theta}$ est de dimension $d_{h} \times d + d_{h} + m \times d_{h} + m$
 \end{verbatim}
 \subsection{Exercice g)}
 Pour $k \neq y$:
-
+\\[6pt]
 $\frac{\partial L}{\partial {O^a_k}} = \frac{\partial}{\partial O^a_k} ( -O^a_y (x)+ log \sum_{i=1}^{m} e^{O^a_i(x)})$
 \\[6pt]
 $= 0 + \frac{\partial}{\partial O^a_k} log \sum_{i=1}^{m} e^{O^a_i(x)}$
@@ -207,15 +205,7 @@ La dimension de :
 
 \subsection{Exercice m)}
 
-$\frac{\partial rect(z)}{\partial z} = \frac{\partial max(0,z)}{\partial z} = $ 
-\[ 
-\left \{
-  \begin{tabular}{c}
-  $0$ si $z \leq 0$ \\
-  $1$ sinon \\
-  \end{tabular}
-\right.
-\]
+$\frac{\partial rect(z)}{\partial z} = \frac{\partial max(0,z)}{\partial z} = \begin{cases}  0$ si $z \leq 0 \\ 1$ sinon$ \end{cases}$ 
 
 Pour $h^a_j \leq 0$:
 
@@ -227,14 +217,7 @@ $\frac{\partial L}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j} \frac{\pa
 
 Au final:
 
-$\frac{\partial L}{\partial h^a_j} =$
-\[  \left \{
-  \begin{tabular}{c}
-  $ 0$ si $h^a_j \leq 0$ \\
-  $\frac{\partial L}{\partial h^s_j}$ sinon \\
-  \end{tabular}
-\right.
-\]
+$\frac{\partial L}{\partial h^a_j} =\begin{cases} 0$ si $h^a_j \leq 0 \\ \frac{\partial L}{\partial h^s_j} $ sinon$ \end{cases}$ \\
 
 $\frac{\partial L}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j} * I_{\lbrace h^a_j > 0 \rbrace} $
 
@@ -246,7 +229,7 @@ $\frac{\partial L}{\partial h^a} = \begin{bmatrix}
 		\frac{\partial L}{\partial h^s_2} * I_{\lbrace h^a_2 > 0 \rbrace}\\
 		\vdots \\
 		\frac{\partial L}{\partial h^s_{d_h}}* I_{\lbrace h^a_{d_h} > 0 \rbrace}
-		\end{bmatrix}$ qui est une vecteur colonne de taill $d_h$
+		\end{bmatrix}$ qui est un vecteur colonne de taill $d_h$
 
 
 
@@ -308,6 +291,38 @@ $\frac{\partial L}{\partial x} = {W^{(1)}}^T \frac{\partial L}{\partial h^a}$
 
 \subsection{Exercice r)}
 
+Pour voir l'effet qu'a le terme de régularisation sur le gradient, on applique de nouveau la technique de rétropropagation mais en utilisant cette fois-ci le risque empirique régularisé \~{R}. Dans la plupart des étapes, puisqu'on nous demandait de ne pas substituer les termes des expressions des dérivées partielles déjà calculées, l'ajout d'un terme de régularisation qui ne dépend que de $W^{(1)}$ et $W^{(2)}$ n'affecte pas directement l'expression de la dérivée partielle calculée.
+
+Le premier endroit où l'on peut appercevoir un changement sur la valeur du gradiant est lors du calcul des gradients par rapport aux paramètres $W^{(2)}$ et $b^2$; soit au point i). Pour la dérivée partielle par rapport à $b^2$, il n'y aura pas de changement puisque $\mathcal{L}(\theta)$ n'a aucune influence sur ce paramètre. Pour $W^{(2)}$ par contre, on remarque une différence:\\
+
+$\frac{\partial (L+\lambda \mathcal{L})}{\partial W_{kj}^{(2)}} = \frac{\partial L}{\partial W_{kj}^{(2)}}+\frac{\partial \lambda \mathcal{L}}{\partial W_{kj}^{(2)}}$
+
+$= \frac{\partial L}{\partial o_{k}^a} h_j^s+\frac{\partial \lambda \mathcal{L}}{\partial W_{kj}^{(2)}}$ (calculez en i)
+
+$= \frac{\partial L}{\partial o_{k}^a} h_j^s+\frac{\lambda \partial \sum_{i,j} (W_{i,j}^{(1)})^2 + \sum_{i,j} (W_{i,j}^{(2)})^2}{\partial W_{kj}^{(2)}}$
+
+$= \frac{\partial L}{\partial o_{k}^a} h_j^s+\frac{\lambda \partial \sum_{i,j} (W_{i,j}^{(1)})^2}{\partial W_{kj}^{(2)}}+\frac{\lambda \partial \sum_{i,j} (W_{i,j}^{(2)})^2}{\partial W_{kj}^{(2)}}$
+
+$= \frac{\partial L}{\partial o_{k}^a} h_j^s+0+\frac{\lambda \partial (W_{k,j}^{(2)})^2}{\partial W_{kj}^{(2)}}$
+
+$= \frac{\partial L}{\partial o_{k}^a} h_j^s+2 \lambda W_{k,j}^{(2)}$
 
 
+On obtient alors une différence de $2 \lambda W_{k,j}^{(2)}$ en utilisant \~{R} plutôt que \^{R}.\\
+
+L'autre endroit où l'on note une différence se trouve au moment de calculer les gradients par rapport aux éléments des paramètres $W^{(1)}$ et $b^1$ de la couche cachée. Tout comme pour l'étape précédante, pour la dérivée partielle par rapport à $b^1$, il n'y aura pas de changement puisque $\mathcal{L}(\theta)$ n'a aucune influence sur ce paramètre. Pour $W^{(1)}$ par contre, on remarque une différence:\\
+
+$\frac{\partial (L+\lambda \mathcal{L})}{\partial W_{kj}^{(1)}} = \frac{\partial L}{\partial W_{kj}^{(1)}}+\frac{\partial \lambda \mathcal{L}}{\partial W_{kj}^{(1)}}$
+
+$ = \frac{\partial L}{\partial h^{a}_{k}} x_j+ \frac{\partial \lambda \mathcal{L}}{\partial W_{kj}^{(1)}} $ (calculez en o)
+
+$ = \frac{\partial L}{\partial h^{a}_{k}} x_j+ \frac{\lambda \partial \sum_{i,j} (W_{i,j}^{(1)})^2 + \sum_{i,j} (W_{i,j}^{(2)})^2}{\partial W_{kj}^{(1)}} $ 
+
+$ = \frac{\partial L}{\partial h^{a}_{k}} x_j+\frac{\lambda \partial \sum_{i,j} (W_{i,j}^{(1)})^2}{\partial W_{kj}^{(2)}}+\frac{\lambda \partial \sum_{i,j} (W_{i,j}^{(2)})^2}{\partial W_{kj}^{(1)}}  $ 
+
+$ = \frac{\partial L}{\partial h^{a}_{k}} x_j+\frac{\lambda \partial (W_{k,j}^{(1)})^2}{\partial W_{kj}^{(1)}}+0  $ 
+
+$ = \frac{\partial L}{\partial h^{a}_{k}} x_j+ 2 \lambda W_{k,j}^{(1)} $ 
+
+On obtient alors une différence de $2 \lambda W_{k,j}^{(1)}$ en utilisant \~{R} plutôt que \^{R}.
 \end{document}
