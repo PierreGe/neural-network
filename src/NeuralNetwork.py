@@ -21,6 +21,8 @@ class NeuralNetwork(object):
         self._hs = utils.relu(self._ha)  # valeur hidden
         self._oa = np.dot(self._w2,self._hs) + self._b2  # valeur entre hidden et sortie
         self._os = utils.softmax(self._oa)  # valeur de sortie
+        print(self._os)
+        print("Somme a 1 ? : " + str(sum(self._os)))
         #TODO verifier si instabilite numerique ici
 
     def bprop(self,X , y):
