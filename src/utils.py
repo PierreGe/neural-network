@@ -18,7 +18,7 @@ def uniform(nc):
 
 
 def randomArray(nc,ligne, col):
-    return [[uniform(nc) for i in range(col)] for j in range(ligne)]
+    return numpy.array([numpy.array([uniform(nc) for i in range(col)]) for j in range(ligne)])
 
 
 def relu(M):
@@ -28,7 +28,7 @@ def relu(M):
         return numpy.array([max(0,val) for val in M])
 
 
-def onehot(m,y): # attention le y indice a partir de 1
+def onehot(m,y): # attention le y indice a partir de 0
     res = numpy.zeros(m)
-    res[y-1] = 1
+    res[y] = 1
     return res
