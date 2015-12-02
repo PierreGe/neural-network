@@ -138,8 +138,33 @@ $n_{\theta}$ est de dimension $d_{h} \times d + d_{h} + m \times d_{h} + m$
 .		theta = theta + learningRate*gradient()
 \end{verbatim}
 \subsection{Exercice g)}
+\todo{Comment ajouter de l'espace entre les lignes pour que ce soit plus lisible?}
+Pour $k \neq y$:
+
+$\frac{\partial L}{\partial {O^a_k}} = \frac{\partial}{\partial O^a_k} ( -O^a_y (x)+ log \sum_{i=1}^{m} e^{O^a_i(x)})$
+
+$= 0 + \frac{\partial}{\partial O^a_k} log \sum_{i=1}^{m} e^{O^a_i(x)}$
+
+$= \frac{\frac{\partial}{\partial O^a_k} \sum_{i=1}^{m} e^{O^a_i(x)}}{\sum_{i=1}^{m} e^{O^a_i(x)}}$
+
+$= \frac{\frac{\partial}{\partial O^a_k} e^{O^a_k(x)}}{\sum_{i=1}^{m} e^{O^a_i(x)}}$
+
+$= \frac{e^{O^a_k(x)}}{\sum_{i=1}^{m} e^{O^a_i(x)}}$
+
+Pour $k=y$:
+
+$\frac{\partial L}{\partial {O^a_y}} = \frac{\partial}{\partial O^a_y} ( -O^a_y (x)+ log \sum_{i=1}^{m} e^{O^a_i(x)})$
+
+$= \frac{-\partial O^a_y}{\partial O^a_y} + \frac{\partial}{\partial O^a_y} log \sum_{i=1}^{m} e^{O^a_i(x)}$
+
+$= -1+\frac{e^{O^a_y(x)}}{\sum_{i=1}^{m} e^{O^a_i(x)}}$
+
+Le premier terme du résultat vaut donc $-1$ seulement lorsque $k=y$ et 0 sinon. On obtient alors:
+
+$\frac{\partial L}{\partial {O^a_k}} = \frac{1}{\sum_{i=1}^{m} e^{O^a_i(x)}} (e^{O^a_1(x), e^{O^a_2(x)}, ..., e^{O^a_m(x)}}- onehot_m(y)) = O^s - onehot_m(y)$
 
 \subsection{Exercice h)}
+
 
 \begin{verbatim}
 	import numpy as np
@@ -183,7 +208,36 @@ La dimension de :
 
 \subsection{Exercice m)}
 
+\todo{formatter acollade}
+
+$\frac{\partial rect(z)}{\partial z} = \frac{\partial max(0,z)}{\partial z} = \lbrace {0 si z \leq 0 \\ 1 sinon}$
+
+Pour $h^a_j \leq 0$:
+
+$\frac{\partial L}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j} \frac{\partial h^s_j}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j} \frac{\partial rect(h^a_j)}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j}*0 = 0$
+
+Pour $h^a_j > 0$:
+
+$\frac{\partial L}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j} \frac{\partial h^s_j}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j} \frac{\partial rect(h^a_j)}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j}*1 = \frac{\partial L}{\partial h^s_j}$
+
+Au final:
+\todo{formatter acollade}
+
+$\frac{\partial L}{\partial h^a_j} = \lbrace 0 si h^a_j \leq 0 \frac{\partial L}{\partial h^s_j} sinon$
+
+$\frac{\partial L}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j} * I_{\lbrace h^a_j > 0 \rbrace} $
+
 \subsection{Exercice n)}
+
+\todo{Possible de simplifier l'expression de ce vecteur?}
+$\frac{\partial L}{\partial h^a} = \begin{bmatrix}
+		\frac{\partial L}{\partial h^s_1} * I_{\lbrace h^a_1 > 0 \rbrace} \\
+		\frac{\partial L}{\partial h^s_2} * I_{\lbrace h^a_2 > 0 \rbrace}\\
+		\vdots \\
+		\frac{\partial L}{\partial h^s_{d_h}}* I_{\lbrace h^a_{d_h} > 0 \rbrace}
+		\end{bmatrix}$ qui est une vecteur colonne de taill $d_h$
+
+
 
 \begin{verbatim}
 	(a + np.abs(a))/2  # astuce pour garder que les nombre positif
@@ -211,14 +265,33 @@ $ = \frac{\partial L}{\partial h^{a}_{k}} x_{j} $
 
 \subsection{Exercice p)}
 
+Expressions matricielles:
+
+$\frac{\partial L}{\partial b^{(1)}} = \frac{\partial L}{\partial h^a}$
+
+$\frac{\partial L}{\partial W^{(1)}} = \frac{\partial L}{\partial h^a}(x)^T$
+
 La dimension de :
 \begin{itemize}
 	\item $\frac{\partial L}{\partial b^{1}}$ est $d_{h}$
 	\item $\frac{\partial L}{\partial W^{(1)}}$ est $d_{h} \times n$ car  $\frac{\partial L}{\partial h^{(a)}}$ est $d_{h} \times 1$ et $ x $ est $1 \times n$
 \end{itemize}
 
+\todo{Expression numpy?}
 
 \subsection{Exercice q)}
+\todo{À valider!}
+
+$\frac{\partial L}{\partial x_j} = \sum_{k=1}^{n} \frac{\partial L}{\partial h_k^a} \frac{\partial h_a^k}{\partial x_j}$
+
+$ = \sum_{k=1}^{n} \frac{\partial L}{\partial h_k^a} (\frac{\partial }{\partial x_j} \sum_{j'} W^{(1)}_{kj'} x_{j'} + b^{(1)}_k$
+
+$ = \sum_{k=1}^{n} \frac{\partial L}{\partial h_k^a} W^{(1)}_{kj} x_{j}$
+
+Sous forme matricielle, on obtient:
+
+$\frac{\partial L}{\partial x} = {W^{(1)}}^T \frac{\partial L}{\partial h^a}$
+
 
 \subsection{Exercice r)}
 
