@@ -234,9 +234,11 @@ $\frac{\partial L}{\partial h^a} = \begin{bmatrix}
 
 
 \begin{verbatim}
-	grad_ha = (grad_hs + np.abs(grad_hs))/2  # astuce pour garder que les nombre positif
+	grad_ha = [[self._gradhs[j][i] if (self._ha[j][i] > 0) else 0 
+	for i in range(len(self._gradhs[j]))]
+	for j in range(len(self._gradhs))] #python
 \end{verbatim}
-
+\todo{Est ce que ca doit etre du numpy?}
 
 \subsection{Exercice o)}
 
