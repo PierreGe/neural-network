@@ -77,7 +77,7 @@ $o^{s} = softmax(o^{a}) = \frac{1}{\sum_{i=1}^{m} e^{o^{a}_{i}}}  (e^{o^{a}_{1}}
 \\[6pt]
 Donc $o^{s}_{k} = \frac{e^{o^{a}_{k}}}{\sum_{i=1}^{m} e^{o^{a}_{i}}}$
 \\[6pt]
-$e^{x} : \mathds{R} \rightarrow \mathds{R}^{+}$ donc la somme au numérateur de la fonction ci-dessus sera positive et la somme au numérateur aussi. Une fraction de deux nombres positifs sera toujours positif donc $o^{s}_{k}$ est toujours positif.
+$e^{x} : \mathds{R} \rightarrow \mathds{R}^{+}$ donc la somme au numérateur de la fonction ci-dessus sera positive et la somme au dénominateur aussi. Une fraction de deux nombres positifs sera toujours positif donc $o^{s}_{k}$ est toujours positif.
 \\[6pt]
 $\sum^{m}_{i=1} o^{s}_{i} = \sum^{m}_{i=1} \frac{e^{o^{a}_{i}}}{\sum_{j=1}^{m} e^{o^{a}_{j}}}$
 \\[6pt]
@@ -102,7 +102,7 @@ $ = -o^{a}_{y}(x) + log(\sum_{i=1}^{m} e^{o^{a}_{i}(x)})$
 
 L'erreur empirique vaut :
 
-$\widehat{R}(f,D) = \sum_{i=1}^{n} L(x,y)$
+$\widehat{R}(f(x,y),D_{n}) = \sum_{i=1}^{n} L(x,y)$
 
 \todo{demander en tp des précisions sur la notation ci-dessus}
 
@@ -129,7 +129,7 @@ En additionnant les dimensions de chacun des élémentes de $\theta$, on trouve 
 \todo{Est-ce qu'on fixe des valeurs pour epsilon et learningRate?}
 \begin{verbatim}
 	theta = initialisation des params de maniere random	
-	epsilon =
+	epsilon = small_value
 	learningRate =
 	while learningRate*gradient() < epsilon :  # attention aux boucles infini
 .		theta = theta + learningRate*gradient()
@@ -229,14 +229,9 @@ $\frac{\partial L}{\partial h^a} = \begin{bmatrix}
 		\frac{\partial L}{\partial h^s_{d_h}}* I_{\lbrace h^a_{d_h} > 0 \rbrace}
 		\end{bmatrix}$ qui est un vecteur colonne de taill $d_h$
 
-
-\todo{Remplacer tel quel par l'expression dans NeuralNetwork.py?}
 \begin{verbatim}
-	grad_ha = [[self._gradhs[j][i] if (self._ha[j][i] > 0) else 0 
-	for i in range(len(self._gradhs[j]))]
-	for j in range(len(self._gradhs))] #python
+	grad_ha = grad_hs * np.where(ha > 0, 1, 0) 
 \end{verbatim}
-\todo{Est ce que ca doit etre du numpy?}
 
 \subsection{Exercice o)}
 

@@ -29,6 +29,7 @@ class NeuralNetwork(object):
         self._gradw2 = np.dot(np.array([[i] for i in self._gradoa]), np.transpose(self._hs))
         self._gradhs = np.dot(np.transpose(self._w2), np.array([[i] for i in self._gradoa]))
         self._gradha = [[self._gradhs[j][i] if (self._ha[j][i] > 0) else 0 for i in range(len(self._gradhs[j]))] for j in range(len(self._gradhs))]
+        self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
         self._gradb1 = np.array([[i] for i in self._gradha])
         self._gradw1 = np.dot(self._gradha, np.transpose(X))
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
