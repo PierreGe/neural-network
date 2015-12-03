@@ -25,9 +25,9 @@ def main():
     print(verifGradient1d(neuralNetwork, X, y))
 
     print("\n\n>>EXERCICE 3 et 4")
-
+    neuralNetwork = NeuralNetwork(2,2,2)
     X,y = readMoonFile()
-    K = 50
+    K = 10
     X = X[:K]
     y = y[:K]
 
