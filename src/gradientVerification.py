@@ -3,7 +3,7 @@ import numpy as np
 
 from NeuralNetwork import NeuralNetwork
 
-def verifGradient():
+def verifGradient(neuralNetwork,X,y,sigma = 1e-4):
 
     # donnees arbitraire
     sigma = 1e-4
@@ -28,8 +28,7 @@ def verifGradient():
             neuralNetwork._w1[i][j] -= sigma
             numgrad.append((lost2 - lostInitial) / sigma)
 
-    print("Verification gradient w1")
-    print(utils.ratioGrad(list(calculategrad.ravel()), numgrad))
+    ratioW1 = utils.ratioGrad(list(calculategrad.ravel()), numgrad)
 
 
     # perte sur ces donnees pour b1
@@ -49,8 +48,7 @@ def verifGradient():
             neuralNetwork._b1[i][j] -= sigma
             numgrad.append((lost2 - lostInitial) * 1./ sigma)
 
-    print("Verification gradient b1")
-    print(utils.ratioGrad(list(calculategrad.ravel()), numgrad))
+    ratiob1 = utils.ratioGrad(list(calculategrad.ravel()), numgrad)
 
     # perte sur ces donnees pour w2
     neuralNetwork.fprop(X)
@@ -69,8 +67,7 @@ def verifGradient():
             neuralNetwork._w2[i][j] -= sigma
             numgrad.append((lost2 - lostInitial) * 1./ sigma)
 
-    print("Verification gradient w2")
-    print(utils.ratioGrad(list(calculategrad.ravel()), numgrad))
+    ratiow2 = utils.ratioGrad(list(calculategrad.ravel()), numgrad)
 
 
     # perte sur ces donnees pour b2
@@ -90,8 +87,9 @@ def verifGradient():
             neuralNetwork._b2[i][j] -= sigma
             numgrad.append((lost2 - lostInitial) * 1./ sigma)
 
-    print("Verification gradient b2")
-    print(utils.ratioGrad(list(calculategrad.ravel()), numgrad))
+    ratiob2 = utils.ratioGrad(list(calculategrad.ravel()), numgrad)
+
+    return ratioW1, ratiob1, ratiow2, ratiob2
 
 
 if __name__ == '__main__':
