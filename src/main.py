@@ -1,7 +1,18 @@
 
 
 from NeuralNetwork import NeuralNetwork
-from gradientVerification import verifGradient1d
+from gradientVerification import verifGradient1d,verifGradientKd
+
+def readMoonFile():
+    lines = open("2moons.txt").readlines()
+    X = []
+    y = []
+    K = 10
+    for l in lines:
+        x1,x2,klass = l.split()
+        X.append([float(x1),float(x2)])
+        y.append(int(klass))
+    return X,y
 
 def main():
 
@@ -15,19 +26,13 @@ def main():
 
     print("\n\n>>EXERCICE 3 et 4")
 
-    lines = open("2moons.txt").readlines()
-    X = []
-    y = []
-    K = 10
-    for l in lines:
-        x1,x2,klass = l.split()
-        X.append([float(x1),float(x2)])
-        y.append(int(klass))
+    X,y = readMoonFile()
+    K = 50
+    X = X[:K]
+    y = y[:K]
 
-    neuralNetwork = NeuralNetwork(2,4,2)
-    for i in range(len(X)):
-        neuralNetwork.fprop(X[i])
-        neuralNetwork.bprop(X[i],y[i])
+    print("Liste des ratio W1, b1, W2, b2")
+    print(verifGradientKd(neuralNetwork, X, y))
 
 
 

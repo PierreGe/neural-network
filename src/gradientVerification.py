@@ -95,6 +95,48 @@ def verifGradient1d(neuralNetwork, X, y, sigma = 1e-4):
 
     return ratioW1, ratiob1, ratiow2, ratiob2
 
+def verifGradientKd(neuralNetwork, Xlist, ylist, sigma = 1e-4):
+    X = Xlist.pop()
+    y = ylist.pop()
+
+    w1nn, w1numerical = verifW1(neuralNetwork,X,y,sigma)
+    b1nn, b1numerical = verifb1(neuralNetwork,X,y,sigma)
+    w2nn, w2numerical = verifW2(neuralNetwork,X,y,sigma)
+    b2nn, b2numerical = verifb2(neuralNetwork,X,y,sigma)
+
+    w1nnRes = w1nn
+    w1numericalRes = w1numerical
+    b1nnRes = b1nn
+    b1numericalRes = b1numerical
+    w2nnRes = w2nn
+    w2numericalRes = w2numerical
+    b2nnRes = b2nn
+    b2numericalRes = b2numerical
+
+    for i in range(len(Xlist)):
+        X = Xlist[i]
+        y = ylist[i]
+
+        w1nn, w1numerical = verifW1(neuralNetwork,X,y,sigma)
+        b1nn, b1numerical = verifb1(neuralNetwork,X,y,sigma)
+        w2nn, w2numerical = verifW2(neuralNetwork,X,y,sigma)
+        b2nn, b2numerical = verifb2(neuralNetwork,X,y,sigma)
+
+        w1nnRes = np.add(w1nn,w1nnRes)
+        w1numericalRes = np.add(w1numerical,w1numericalRes)
+        b1nnRes = np.add(b1nn,b1nnRes)
+        b1numericalRes = np.add(b1numerical,b1numericalRes)
+        w2nnRes = np.add(w2nn,w2nnRes)
+        w2numericalRes = np.add(w2numerical,w2numericalRes)
+        b2nnRes = np.add(b2nn,b2nnRes)
+        b2numericalRes = np.add(b2numerical,b2numericalRes)
+
+    ratioW1 = utils.ratioGrad(w1nnRes, w1numericalRes)
+    ratiob1 = utils.ratioGrad(b1nnRes, b1numericalRes)
+    ratiow2 = utils.ratioGrad(w2nnRes, w2numericalRes)
+    ratiob2 = utils.ratioGrad(b2nnRes, b2numericalRes)
+    return ratioW1, ratiob1, ratiow2, ratiob2
+
 
 if __name__ == '__main__':
 
