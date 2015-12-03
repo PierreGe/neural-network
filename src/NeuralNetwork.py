@@ -15,6 +15,8 @@ class NeuralNetwork(object):
         self._b1 = np.array([[0.] for i in range(h)])  # h
         self._b2 = np.array([[0.] for i in range(m)])  # m
 
+        self._K = 0.2 # hyperparametre K
+
     def fprop(self, X):
         X = np.array([[float(x)] for x in X])
         self._ha = np.dot(self._w1, X) + self._b1   # valeur des synapses entre x et hidden
@@ -34,6 +36,8 @@ class NeuralNetwork(object):
         self._gradw1 = np.dot(self._gradha, np.transpose(X))
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
 
+    def minibatch(self):
+        pass
 
 def verifGradient():
     sigma = 1e-4
