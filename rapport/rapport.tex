@@ -104,8 +104,6 @@ L'erreur empirique vaut :
 
 $\widehat{R}(f(x,y),D_{n}) = \sum_{i=1}^{n} L(x,y)$
 
-\todo{demander en tp des précisions sur la notation ci-dessus}
-
 Les paramètres sont :
 
 $ \theta = \{ W^{(1)},W^{(2)},b^{(1)},b^{(2)} \}$ avec $W^{(1)}$ et $b^{(1)}$ représentant les connexions synaptiques entre l'entrée et la couche cachée et $W^{(2)}$ et $b^{(2)}$ représentant les connexions synaptiques entre la couche cachée et la sortie.
@@ -122,11 +120,10 @@ En additionnant les dimensions de chacun des élémentes de $\theta$, on trouve 
 	def gradient(ensemble_donne):
 .		somme = 0
 .		for x in ensemble_donne:
-.		.	sum += derivation_lost(x)
+.		.	sum += derivate_L(x)
 .		return somme
 \end{verbatim}
 
-\todo{Est-ce qu'on fixe des valeurs pour epsilon et learningRate?}
 \begin{verbatim}
 	theta = initialisation des params de maniere random	
 	epsilon = small_value
