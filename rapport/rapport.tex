@@ -67,9 +67,9 @@ $W^{(2)}$ est de dimension $m \times d_{h}$
 
 $b^{(2)}$ est de dimension $m$
 
-Le vecteur d'activation est : $o^{a} = W^{(2)} h_{s} + b^{(2)}$
+Le vecteur d'activation est : $o^{a} = W^{(2)} h^{s} + b^{(2)}$
 
-Avec $o^{a}_{k} = W^{(2)}_{k1} h_{s_1} + W^{(2)}_{k2} h_{s_2} + ... + W^{(2)}_{kn} h_{s_n} + b^{(2)}_{k}$
+Avec $o^{a}_{k} = W^{(2)}_{k1} h^s_1 + W^{(2)}_{k2} h^s_2 + ... + W^{(2)}_{kn} h^s_n + b^{(2)}_{k}$
 
 \subsection{Exercice c)}
 
@@ -114,9 +114,7 @@ Le problèmes d'optimisation revient donc à l'équation suivante :
 
 $\theta^{*} = argmin_{\theta} \widehat{R}(f,D) $
 
-Les dimensions sont :
-
-$n_{\theta}$ est de dimension $d_{h} \times d + d_{h} + m \times d_{h} + m$
+En additionnant les dimensions de chacun des élémentes de $\theta$, on trouve que $n_{\theta}$ correspond alors à $d_{h} \times d + d_{h} + m \times d_{h} + m$ paramètres scalaires.
 
 \subsection{Exercice f)} 
 
@@ -128,8 +126,9 @@ $n_{\theta}$ est de dimension $d_{h} \times d + d_{h} + m \times d_{h} + m$
 .		return somme
 \end{verbatim}
 
+\todo{Est-ce qu'on fixe des valeurs pour epsilon et learningRate?}
 \begin{verbatim}
-	theta = initialisation des params de maniere random
+	theta = initialisation des params de maniere random	
 	epsilon =
 	learningRate =
 	while learningRate*gradient() < epsilon :  # attention aux boucles infini
@@ -223,7 +222,6 @@ $\frac{\partial L}{\partial h^a_j} = \frac{\partial L}{\partial h^s_j} * I_{\lbr
 
 \subsection{Exercice n)}
 
-\todo{Possible de simplifier l'expression de ce vecteur?}
 $\frac{\partial L}{\partial h^a} = \begin{bmatrix}
 		\frac{\partial L}{\partial h^s_1} * I_{\lbrace h^a_1 > 0 \rbrace} \\
 		\frac{\partial L}{\partial h^s_2} * I_{\lbrace h^a_2 > 0 \rbrace}\\
@@ -232,7 +230,7 @@ $\frac{\partial L}{\partial h^a} = \begin{bmatrix}
 		\end{bmatrix}$ qui est un vecteur colonne de taill $d_h$
 
 
-
+\todo{Remplacer tel quel par l'expression dans NeuralNetwork.py?}
 \begin{verbatim}
 	grad_ha = (grad_hs + np.abs(grad_hs))/2  # astuce pour garder que les nombre positif
 \end{verbatim}
@@ -244,7 +242,7 @@ Pour $b^{(1)}$ :
 
 $\frac{\partial L}{\partial b^{(1)}_{k}} = \frac{\partial L}{\partial h^{a}_{k}} \frac{\partial h^{a}_{k}}{\partial b^{(1)}_{k}}$
 
-$ = \frac{\partial L}{\partial h^{a}_{k}} \frac{\partial \sum_{j'} W^{(1)}_{kj'} x_{j} + b^{(1)}_{k}}{\partial b^{1}_{k}}$
+$ = \frac{\partial L}{\partial h^{a}_{k}} \frac{\partial \sum_{j'} W^{(1)}_{kj'} x_{j'} + b^{(1)}_{k}}{\partial b^{(1)}_{k}}$
 
 $ = \frac{\partial L}{\partial h^{a}_{k}}$
 
@@ -252,7 +250,7 @@ Pour $W^{(1)}$ :
 
 $\frac{\partial L}{\partial W^{(1)}_{kj}} = \frac{\partial L}{\partial h^{a}_{k}} \frac{\partial h^{a}_{k}}{\partial W^{(1)}_{kj}} $
 
-$ = \frac{\partial L}{\partial h^{a}_{k}} \frac{\partial \sum_{j'} W^{(1)}_{kj'} x_{j} + b^{(1)}_{k}}{\partial W^{(1)}_{kj}}$
+$ = \frac{\partial L}{\partial h^{a}_{k}} \frac{\partial \sum_{j'} W^{(1)}_{kj'} x_{j'} + b^{(1)}_{k}}{\partial W^{(1)}_{kj}}$
 
 $ = \frac{\partial L}{\partial h^{a}_{k}} x_{j} $
 
@@ -267,7 +265,7 @@ $\frac{\partial L}{\partial W^{(1)}} = \frac{\partial L}{\partial h^a}(x)^T$
 
 La dimension de :
 \begin{itemize}
-	\item $\frac{\partial L}{\partial b^{1}}$ est $d_{h}$
+	\item $\frac{\partial L}{\partial b^{(1)}}$ est $d_{h}$
 	\item $\frac{\partial L}{\partial W^{(1)}}$ est $d_{h} \times n$ car  $\frac{\partial L}{\partial h^{(a)}}$ est $d_{h} \times 1$ et $ x $ est $1 \times n$
 \end{itemize}
 
@@ -281,9 +279,9 @@ La dimension de :
 
 $\frac{\partial L}{\partial x_j} = \sum_{k=1}^{n} \frac{\partial L}{\partial h_k^a} \frac{\partial h_a^k}{\partial x_j}$
 
-$ = \sum_{k=1}^{n} \frac{\partial L}{\partial h_k^a} (\frac{\partial }{\partial x_j} \sum_{j'} W^{(1)}_{kj'} x_{j'} + b^{(1)}_k$
+$ = \sum_{k=1}^{n} \frac{\partial L}{\partial h_k^a} (\frac{\partial }{\partial x_j} \sum_{j'} W^{(1)}_{kj'} x_{j'} + b^{(1)}_k)$
 
-$ = \sum_{k=1}^{n} \frac{\partial L}{\partial h_k^a} W^{(1)}_{kj} x_{j}$
+$ = \sum_{k=1}^{n} \frac{\partial L}{\partial h_k^a} W^{(1)}_{kj}$
 
 Sous forme matricielle, on obtient:
 
