@@ -1,7 +1,7 @@
 
 
 from NeuralNetwork import NeuralNetwork
-from gradientVerification import verifGradient
+from gradientVerification import verifGradient1d
 
 def main():
 
@@ -11,7 +11,7 @@ def main():
     X = [0.4,0.7]
     y = 1 # imaginons que c'est un point de la classe
     print("Liste des ratio W1, b1, W2, b2")
-    print(verifGradient (neuralNetwork,X,y))
+    print(verifGradient1d(neuralNetwork, X, y))
 
     print("\n\n>>EXERCICE 3 et 4")
 

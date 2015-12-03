@@ -3,14 +3,8 @@ import numpy as np
 
 from NeuralNetwork import NeuralNetwork
 
-def verifGradient(neuralNetwork,X,y,sigma = 1e-4):
 
-    # donnees arbitraire
-    sigma = 1e-4
-    neuralNetwork = NeuralNetwork(3,4,2)
-    X = [0.4,0.7,0.3]
-    y = 1 # imaginons que c'est un point de la classe 2
-
+def verifW1(neuralNetwork,X,y,sigma):
     # perte sur ces donnees pour w1
     neuralNetwork.fprop(X)
     neuralNetwork.bprop(X,y)
@@ -27,10 +21,9 @@ def verifGradient(neuralNetwork,X,y,sigma = 1e-4):
             lost2 = -(np.log(neuralNetwork._os[y][0]))
             neuralNetwork._w1[i][j] -= sigma
             numgrad.append((lost2 - lostInitial) / sigma)
+    return list(calculategrad.ravel()), numgrad
 
-    ratioW1 = utils.ratioGrad(list(calculategrad.ravel()), numgrad)
-
-
+def verifb1(neuralNetwork,X,y,sigma):
     # perte sur ces donnees pour b1
     neuralNetwork.fprop(X)
     neuralNetwork.bprop(X,y)
@@ -47,9 +40,9 @@ def verifGradient(neuralNetwork,X,y,sigma = 1e-4):
             lost2 = -(np.log(neuralNetwork._os[y][0]))
             neuralNetwork._b1[i][j] -= sigma
             numgrad.append((lost2 - lostInitial) * 1./ sigma)
+    return list(calculategrad.ravel()), numgrad
 
-    ratiob1 = utils.ratioGrad(list(calculategrad.ravel()), numgrad)
-
+def verifW2(neuralNetwork,X,y,sigma):
     # perte sur ces donnees pour w2
     neuralNetwork.fprop(X)
     neuralNetwork.bprop(X,y)
@@ -66,10 +59,9 @@ def verifGradient(neuralNetwork,X,y,sigma = 1e-4):
             lost2 = -(np.log(neuralNetwork._os[y][0]))
             neuralNetwork._w2[i][j] -= sigma
             numgrad.append((lost2 - lostInitial) * 1./ sigma)
+    return list(calculategrad.ravel()), numgrad
 
-    ratiow2 = utils.ratioGrad(list(calculategrad.ravel()), numgrad)
-
-
+def verifb2(neuralNetwork,X,y,sigma):
     # perte sur ces donnees pour b2
     neuralNetwork.fprop(X)
     neuralNetwork.bprop(X,y)
@@ -86,12 +78,24 @@ def verifGradient(neuralNetwork,X,y,sigma = 1e-4):
             lost2 = -(np.log(neuralNetwork._os[y][0]))
             neuralNetwork._b2[i][j] -= sigma
             numgrad.append((lost2 - lostInitial) * 1./ sigma)
+    return list(calculategrad.ravel()), numgrad
 
-    ratiob2 = utils.ratioGrad(list(calculategrad.ravel()), numgrad)
+def verifGradient1d(neuralNetwork, X, y, sigma = 1e-4):
+    w1nn, w1numerical = verifW1(neuralNetwork,X,y,sigma)
+    ratioW1 = utils.ratioGrad(w1nn, w1numerical)
+
+    b1nn, b1numerical = verifb1(neuralNetwork,X,y,sigma)
+    ratiob1 = utils.ratioGrad(b1nn, b1numerical)
+
+    w2nn, w2numerical = verifW2(neuralNetwork,X,y,sigma)
+    ratiow2 = utils.ratioGrad(w2nn, w2numerical)
+
+    b2nn, b2numerical = verifb2(neuralNetwork,X,y,sigma)
+    ratiob2 = utils.ratioGrad(b2nn, b2numerical)
 
     return ratioW1, ratiob1, ratiow2, ratiob2
 
 
 if __name__ == '__main__':
 
-    verifGradient()
+    verifGradient1d()
