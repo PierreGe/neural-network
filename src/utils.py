@@ -32,3 +32,15 @@ def onehot(m,y): # attention le y indice a partir de 0
     res = numpy.zeros(m)
     res[y] = 1
     return res
+
+
+def ratioGrad(vec1, vec2):
+    res = []
+    for i in range(len(vec1)):
+        if vec2[i] != 0:
+            res.append(vec1[i]/vec2[i])
+        elif vec1[i]== vec2[i]:
+            res.append(1)
+        else:
+            res.append(float('nan'))
+    return res
