@@ -1,8 +1,9 @@
-
+# -*- coding: utf-8 -*-
 
 from NeuralNetwork import NeuralNetwork
 from gradientVerification import verifGradient1d,verifGradientKd
-
+from trainNetwork import trainNetwork
+from utils import plotRegionsDescision
 def readMoonFile():
     lines = open("2moons.txt").readlines()
     X = []
@@ -34,6 +35,29 @@ def main():
     print("Liste des ratio W1, b1, W2, b2")
     print(verifGradientKd(neuralNetwork, X, y))
 
+
+    print("\n\n>>EXERCICE 5 Entrainement du reseau de neuronne + Variation des hyper-parametres")
+    X, y = readMoonFile()
+    wd = 1  #todo Ajouter terme de régularisation dans le réseau de neuronne.
+    h = 2
+    maxIter = 5
+
+    neuralNetwork = trainNetwork(X, y,  wd, h, maxIter)
+    predictions = neuralNetwork.computePredictions(X)
+
+    success = 0
+    fail = 0
+    for i in range(len(predictions)):
+        if predictions[i] == y[i]:
+            success += 1
+        else:
+            fail += 1
+
+    print "Success: "+str(success)
+    print "Error: "+str(fail)
+    print "Ratio: "+str(100.0*success/len(y))
+
+    plotRegionsDescision(X, y, neuralNetwork)
 
 
 if __name__ == '__main__':
