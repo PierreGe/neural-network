@@ -45,6 +45,17 @@ def ratioGrad(vec1, vec2):
             res.append(float('nan'))
     return res
 
+def calculatePredictionsEfficiency(preds, trueVals):
+    success = 0
+    fail = 0
+    for i in range(len(preds)):
+        if preds[i] == trueVals[i]:
+            success += 1
+        else:
+            fail += 1
+
+    return 100.0*success/len(trueVals)
+
 def getClassCount(y):
     classes = []
     for i in y:
@@ -53,7 +64,7 @@ def getClassCount(y):
 
     return len(classes)
 
-def plotRegionsDescision(X, y, neuralNetwork):
+def plotRegionsDescision(X, y, neuralNetwork, title, name):
     X = numpy.array(X)
 
     minX1 = min(X[:, 0])
@@ -79,10 +90,9 @@ def plotRegionsDescision(X, y, neuralNetwork):
     #todo pas de set de validation en ce moment
     #plt.scatter(self.validationSet[:, 0], self.validationSet[:, 1], c=self.iris[self.trainSetSize:, -1], marker='s', s=100)
 
-    plt.title("Regions de decision")
-    plt.show()
+    plt.title("Regions de decision\n"+title)
+    #plt.show()
 
-    #fileTitle = 'bayes_parzen_'+str(sigma)+'.png'
-    #plt.savefig(fileTitle)
-    #print("[Created] file : " + fileTitle)
+    plt.savefig(name+".png")
+    print("[Created] file : " + name+".png")
     plt.close()

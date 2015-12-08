@@ -14,7 +14,7 @@ def trainNetwork(X, y, wd, h, maxIter, eta = 0.01):
     d = len(X[0])
     m = getClassCount(y)
 
-    neuralNetwork = NeuralNetwork(d, h, m)
+    neuralNetwork = NeuralNetwork(d, h, m, wd)
 
     for iter in range(maxIter):
         classificationErrorFound = False
