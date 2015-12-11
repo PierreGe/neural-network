@@ -32,7 +32,7 @@ class NeuralNetwork(object):
                                                                          y)  # todo Vecteur ligne alors que tous les autres sont des vecteurs colonnes. Normal?
         self._gradb2 = np.array([[i] for i in self._gradoa])
         self._gradw2 = np.dot(np.array([[i] for i in self._gradoa]), np.transpose(
-            self._hs)) + 2 * self.wd * self._w2  # todo verifer ajout terme regularisation
+                self._hs)) + 2 * self.wd * self._w2  # todo verifer ajout terme regularisation
         self._gradhs = np.dot(np.transpose(self._w2), np.array([[i] for i in self._gradoa]))
         self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
         self._gradb1 = np.array([i for i in
@@ -61,7 +61,7 @@ class NeuralNetwork(object):
 
         return predictions
 
-    def train(self, X, y, maxIter, eta = 0.01):
+    def train(self, X, y, maxIter, eta=0.01):
         """
         :param X: données d'entrainement
         :param y: classes réelles des données X

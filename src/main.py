@@ -16,7 +16,7 @@ def main():
     res = verifGradient1d(neuralNetwork, X, y)
     print(res)
     print(">Tout les ratio sont bien entre 0.99 et 1.01" if False not in [0.99 < i < 1.01 for i in (
-    np.array(res)).flatten()] else "Echec de la verif..")
+        np.array(res)).flatten()] else "Echec de la verif..")
 
     print("\n\n>>EXERCICE 3 et 4")
     neuralNetwork = NeuralNetwork(2, 2, 2)
@@ -29,7 +29,7 @@ def main():
     res = verifGradientKd(neuralNetwork, X, y)
     print(res)
     print(">Tout les ratio sont bien entre 0.99 et 1.01" if False not in [0.99 < i < 1.01 for i in (
-    np.array(res)).flatten()] else "Echec de la verif..")
+        np.array(res)).flatten()] else "Echec de la verif..")
 
     print("\n\n>>EXERCICE 5 Entrainement du reseau de neuronne + Variation des hyper-parametres")
     X, y = utils.readMoonFile()
@@ -45,35 +45,35 @@ def main():
     sample_maxIter = [1, 2, 5, 10, 20]
 
     for h in sample_h:
-        neuralNetwork = NeuralNetwork(len(X[0]),h,utils.getClassCount(y),default_wd)
+        neuralNetwork = NeuralNetwork(len(X[0]), h, utils.getClassCount(y), default_wd)
         neuralNetwork.train(X, y, default_maxIter)
         predictions = neuralNetwork.computePredictions(X)
 
         trainEfficiency = utils.calculatePredictionsEfficiency(predictions, y)
         title = "h: " + str(h) + " / wd: " + str(default_wd) + " / " + str(
-            default_maxIter) + " epoques" + " / Train Err: " + str(100 - trainEfficiency) + "%"
+                default_maxIter) + " epoques" + " / Train Err: " + str(100 - trainEfficiency) + "%"
         name = "regions_decision" + str(h) + "_" + str(default_wd) + "_" + str(default_maxIter)
         utils.plotRegionsDescision(X, y, neuralNetwork, title, name)
 
     for wd in sample_wd:
-        neuralNetwork = NeuralNetwork(len(X[0]),default_h,utils.getClassCount(y),wd)
+        neuralNetwork = NeuralNetwork(len(X[0]), default_h, utils.getClassCount(y), wd)
         neuralNetwork.train(X, y, default_maxIter)
         predictions = neuralNetwork.computePredictions(X)
 
         trainEfficiency = utils.calculatePredictionsEfficiency(predictions, y)
         title = "h: " + str(default_h) + " / wd: " + str(wd) + " / " + str(
-            default_maxIter) + " epoques" + " / Train Err: " + str(100 - trainEfficiency) + "%"
+                default_maxIter) + " epoques" + " / Train Err: " + str(100 - trainEfficiency) + "%"
         name = "regions_decision" + str(default_h) + "_" + str(wd) + "_" + str(default_maxIter)
         utils.plotRegionsDescision(X, y, neuralNetwork, title, name)
 
     for maxIter in sample_maxIter:
-        neuralNetwork = NeuralNetwork(len(X[0]),default_h,utils.getClassCount(y),default_wd)
+        neuralNetwork = NeuralNetwork(len(X[0]), default_h, utils.getClassCount(y), default_wd)
         neuralNetwork.train(X, y, maxIter)
         predictions = neuralNetwork.computePredictions(X)
 
         trainEfficiency = utils.calculatePredictionsEfficiency(predictions, y)
         title = "h: " + str(default_h) + " / wd: " + str(default_wd) + " / " + str(
-            maxIter) + " epoques" + " / Train Err: " + str(100 - trainEfficiency) + "%"
+                maxIter) + " epoques" + " / Train Err: " + str(100 - trainEfficiency) + "%"
         name = "regions_decision" + str(default_h) + "_" + str(default_wd) + "_" + str(maxIter)
         utils.plotRegionsDescision(X, y, neuralNetwork, title, name)
 
