@@ -64,7 +64,6 @@ def readMoonFile():
     lines = open("data/2moons.txt").readlines()
     X = []
     y = []
-    K = 10
     for l in lines:
         x1, x2, klass = l.split()
         X.append([float(x1), float(x2)])

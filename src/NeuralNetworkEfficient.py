@@ -3,7 +3,7 @@ import utils
 import numpy as np
 
 
-class NeuralNetwork(object):
+class NeuralNetworkEfficient(object):
     """docstring for NeuralNetwork"""
 
     def __init__(self, d, h, m, wd=0):
@@ -28,14 +28,15 @@ class NeuralNetwork(object):
 
     def bprop(self, X, y):
         X = np.array([[float(x)] for x in X])
-        self._gradoa = np.array([i[0] for i in self._os]) - utils.onehot(self._m,y)
-        self._gradoa = np.array([[i] for i in self._gradoa]) # obtenir un vecteur colonne
-        self._gradb2 = self._gradoa
-        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) + 2 * self.wd * self._w2  # todo verifer ajout terme regularisation
-        self._gradhs = np.dot(np.transpose(self._w2), self._gradoa)
+        self._gradoa = np.array([i[0] for i in self._os]) - utils.onehot(self._m,
+                                                                         y)  # todo Vecteur ligne alors que tous les autres sont des vecteurs colonnes. Normal?
+        self._gradb2 = np.array([[i] for i in self._gradoa])
+        self._gradw2 = np.dot(np.array([[i] for i in self._gradoa]), np.transpose(
+                self._hs)) + 2 * self.wd * self._w2  # todo verifer ajout terme regularisation
+        self._gradhs = np.dot(np.transpose(self._w2), np.array([[i] for i in self._gradoa]))
         self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
         self._gradb1 = np.array([i for i in
-                                 self._gradha])
+                                 self._gradha])  # todo Crochet retirés autour de i. Étaient-ils nécéssaires? on peut simplifier par gradb1 = gradha puisqu'ils sont 2 vecteurs colonnes
         self._gradw1 = np.dot(self._gradha,
                               np.transpose(X)) + 2 * self.wd * self._w1  # todo verifer ajout terme regularisation
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
@@ -91,11 +92,3 @@ class NeuralNetwork(object):
 
             if not classificationErrorFound:
                 break
-
-
-if __name__ == '__main__':
-    self = NeuralNetwork(4, 6, 3)
-    X = [30, 20, 45, 50]
-    y = 1  # imaginons que c'est un point de la classe 3
-    self.fprop(X)
-    self.bprop(X, y)
