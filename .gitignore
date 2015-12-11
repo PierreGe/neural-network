@@ -3,7 +3,8 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-
+rapport/3/.texpadtmp/*
+/rapport/3/.texpadtmp/
 # C extensions
 *.so
 

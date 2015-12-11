@@ -93,7 +93,7 @@ def verifGradient1d(neuralNetwork, X, y, sigma = 1e-4):
     b2nn, b2numerical = verifb2(neuralNetwork,X,y,sigma)
     ratiob2 = utils.ratioGrad(b2nn, b2numerical)
 
-    return ratioW1, ratiob1, ratiow2, ratiob2
+    return ratioW1 + ratiob1 + ratiow2 + ratiob2
 
 def verifGradientKd(neuralNetwork, Xlist, ylist, sigma = 1e-4):
     X = Xlist.pop()
@@ -135,7 +135,7 @@ def verifGradientKd(neuralNetwork, Xlist, ylist, sigma = 1e-4):
     ratiob1 = utils.ratioGrad(b1nnRes, b1numericalRes)
     ratiow2 = utils.ratioGrad(w2nnRes, w2numericalRes)
     ratiob2 = utils.ratioGrad(b2nnRes, b2numericalRes)
-    return ratioW1, ratiob1, ratiow2, ratiob2
+    return ratioW1 + ratiob1 + ratiow2 + ratiob2
 
 
 if __name__ == '__main__':
