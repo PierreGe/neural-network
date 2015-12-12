@@ -5,7 +5,7 @@ from gradientVerification import verifGradient1d, verifGradientKd
 import utils
 import numpy as np
 
-def exo1234()
+def exo1234():
     print("\n\n>>EXERCICE 1 et 2")
     sigma = 1e-4
     neuralNetwork = NeuralNetwork(2, 2, 2)
