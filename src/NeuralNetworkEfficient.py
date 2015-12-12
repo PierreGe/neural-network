@@ -20,7 +20,7 @@ class NeuralNetworkEfficient(object):
         self._K = K #
 
     def fprop(self, X):
-        X = np.array([[float(x)] for x in X])
+        X = np.array([np.array([[float(x)] for x in j]) for j in X])
         self._ha = np.dot(self._w1, X) + self._b1  # valeur des synapses entre x et hidden
         self._hs = utils.relu(self._ha)  # valeur hidden
         self._oa = np.dot(self._w2, self._hs) + self._b2  # valeur entre hidden et sortie
