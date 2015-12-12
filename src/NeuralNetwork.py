@@ -133,19 +133,14 @@ class NeuralNetwork(object):
                     b1update += self._gradb1
                     b2update += self._gradb2
 
-            self._w1 -= eta * (w1update/nbrAverage)
-            self._w2 -= eta * (w2update/nbrAverage)
-            self._b1 -= eta * (b1update/nbrAverage)
-            self._b2 -= eta * (b2update/nbrAverage)
-
             if nbrAverage > 0:
                 self._w1 -= eta * (w1update/nbrAverage)
                 self._w2 -= eta * (w2update/nbrAverage)
                 self._b1 -= eta * (b1update/nbrAverage)
                 self._b2 -= eta * (b2update/nbrAverage)
 
-			self._calculateEfficiency()
-	
+            self._calculateEfficiency()
+
             if not classificationErrorFound:
                 break
 
