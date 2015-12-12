@@ -88,10 +88,10 @@ def readMNISTfile():
     ytrain = data[0][1]  #: vecteur des train labels
 
     Xvalid = data[1][0]  #: matrice de valid data
-    yvalid = data[1][0]  #: vecteur des valid labels
+    yvalid = data[1][1]  #: vecteur des valid labels
 
     Xtest = data[2][0]  #: matrice de test data
-    ytest = data[2][0]  #: vecteur des test labels
+    ytest = data[2][1]  #: vecteur des test labels
     return Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest
 
 
