@@ -41,44 +41,33 @@ def exo5():
     sample_h = [2, 5, 10, 50]
 
     default_wd = 0.1
-    sample_wd = [0, 0.00001, 0.0001, 0.001,
-                 0.01]  # todo Valider terme de regularisation dans NeuralNetwork. Lorsque != 0, validations #1,2,3,4 ne sont plus bon...
+    sample_wd = [0, 0.00001, 0.0001, 0.001, 0.01]
 
     default_maxIter = 5
     sample_maxIter = [1, 2, 5, 10, 20, 100, 200]
 
     for h in sample_h:
-        neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), wd=default_wd)
-        neuralNetwork.train(Xtrain, ytrain, default_maxIter)
-        predictions = neuralNetwork.computePredictions(Xvalid)
-
-        trainEfficiency = utils.calculatePredictionsEfficiency(predictions, yvalid)
-        title = "h: " + str(h) + " / wd: " + str(default_wd) + " / " + str(
-                default_maxIter) + " epoques" + " / Train Err: " + str(100 - trainEfficiency) + "%"
-        name = "regions_decision" + str(h) + "_" + str(default_wd) + "_" + str(default_maxIter)
-        utils.plotRegionsDescision(Xtrain, ytrain, neuralNetwork, title, name)
+        trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, default_wd, default_maxIter)
 
     for wd in sample_wd:
-        neuralNetwork = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), wd=wd)
-        neuralNetwork.train(Xtrain, ytrain, default_maxIter)
-        predictions = neuralNetwork.computePredictions(Xvalid)
-
-        trainEfficiency = utils.calculatePredictionsEfficiency(predictions, yvalid)
-        title = "h: " + str(default_h) + " / wd: " + str(wd) + " / " + str(
-                default_maxIter) + " epoques" + " / Train Err: " + str(100 - trainEfficiency) + "%"
-        name = "regions_decision" + str(default_h) + "_" + str(wd) + "_" + str(default_maxIter)
-        utils.plotRegionsDescision(Xtrain, ytrain, neuralNetwork, title, name)
+        trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, default_h, wd, default_maxIter)
 
     for maxIter in sample_maxIter:
-        neuralNetwork = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), wd=default_wd)
-        neuralNetwork.train(Xtrain, ytrain, maxIter)
-        predictions = neuralNetwork.computePredictions(Xvalid)
+        trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, default_h, default_wd, maxIter)
 
-        trainEfficiency = utils.calculatePredictionsEfficiency(predictions, yvalid)
-        title = "h: " + str(default_h) + " / wd: " + str(default_wd) + " / " + str(
-                maxIter) + " epoques" + " / Train Err: " + str(100 - trainEfficiency) + "%"
-        name = "regions_decision" + str(default_h) + "_" + str(default_wd) + "_" + str(maxIter)
-        utils.plotRegionsDescision(Xtrain, ytrain, neuralNetwork, title, name)
+def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
+    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), wd)
+    neuralNetwork.train(Xtrain, ytrain, maxIter)
+    predTrain = neuralNetwork.computePredictions(Xtrain)
+    predValid = neuralNetwork.computePredictions(Xvalid)
+    predTest = neuralNetwork.computePredictions(Xtest)
+    trainEfficiency = utils.calculatePredictionsEfficiency(predTrain, ytrain)
+    validEfficiency = utils.calculatePredictionsEfficiency(predValid, yvalid)
+    testEfficiency = utils.calculatePredictionsEfficiency(predTest, ytest)
+    hparams = "[h: " + str(h) + " / wd: " + str(wd) + " / " + str(maxIter) + " epoques]"
+    title = "Train Err: " + "{:.2f}".format(100 - trainEfficiency) + "%" \
+            + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
+            + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%"
 
 def exo67():
     print("\n\n>>EXERCICE 6 Calcul matriciel")
@@ -115,5 +104,9 @@ def main():
     exo67()
     #exo8()
 
+    name = "regions_decision" + str(h) + "_" + str(wd) + "_" + str(maxIter)
+    utils.plotRegionsDescision(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, neuralNetwork, title, name,hparams)
+
 if __name__ == '__main__':
     main()
+
