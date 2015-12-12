@@ -1,7 +1,5 @@
-import random
 import numpy
 import matplotlib.pyplot as plt
-
 import gzip, pickle
 
 
@@ -105,9 +103,11 @@ def getClassCount(y):
 
     return len(classes)
 
-
-def plotRegionsDescision(X, y, neuralNetwork, title, name):
-    X = numpy.array(X)
+def plotRegionsDescision(XTrain, yTrain, XValid, yValid, XTest, yTest, neuralNetwork, title, name, hparams):
+    XTrain = numpy.array(XTrain)
+    XValid = numpy.array(XValid)
+    XTest = numpy.array(XTest)
+    X = numpy.concatenate((XTrain, XValid, XTest))
 
     minX1 = min(X[:, 0])
     maxX1 = max(X[:, 0])
@@ -127,12 +127,12 @@ def plotRegionsDescision(X, y, neuralNetwork, title, name):
 
     predictions = neuralNetwork.computePredictions(grille)
     plt.scatter(grille[:, 0], grille[:, 1], s=50, c=predictions, alpha=0.25)
-    plt.scatter(X[:, 0], X[:, 1], c=y, marker='v', s=100)
 
-    # todo pas de set de validation en ce moment
-    # plt.scatter(self.validationSet[:, 0], self.validationSet[:, 1], c=self.iris[self.trainSetSize:, -1], marker='s', s=100)
+    plt.scatter(XTrain[:, 0], XTrain[:, 1], c=yTrain, marker='o', s=100)
+    plt.scatter(XValid[:, 0], XValid[:, 1], c=yValid, marker='s', s=100)
+    plt.scatter(XTest[:, 0], XTest[:, 1], c=yTest, marker='*', s=100)
 
-    plt.title("Regions de decision\n" + title)
+    plt.title("Regions de decision "+hparams+"\n" + title)
     # plt.show()
 
     plt.savefig(name + ".png")
