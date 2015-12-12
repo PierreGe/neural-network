@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from NeuralNetwork import NeuralNetwork
+from NeuralNetworkEfficient import NeuralNetworkEfficient
 from gradientVerification import verifGradient1d, verifGradientKd
 import utils
 import numpy as np
@@ -81,7 +82,7 @@ def exo5():
 
 def exo67():
     print("\n\n>>EXERCICE 6 Calcul matriciel")
-    nn = NeuralNetwork(4, 6, 3)
+    nn = NeuralNetworkEfficient(4, 6, 3)
     X = [[30, 20, 45, 50], [20, 10, 35, 40]]
     y = [1,0]  # imaginons que c'est un point de la classe 3
     nn.fprop(X)
@@ -92,7 +93,7 @@ def exo8():
     Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMNISTfile()
     default_h = 30
     default_wd = 0.0001
-    maxIter = 1
+    maxIter = 30
     t1 = datetime.now()
     neuralNetwork = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain),K=100, wd=default_wd)
     neuralNetwork.train(Xtrain, ytrain, maxIter)
