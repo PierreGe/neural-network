@@ -56,7 +56,7 @@ def exo5():
         trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, default_h, default_wd, maxIter)
 
 def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
-    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), wd)
+    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=50, wd=wd)
     neuralNetwork.train(Xtrain, ytrain, maxIter)
     predTrain = neuralNetwork.computePredictions(Xtrain)
     predValid = neuralNetwork.computePredictions(Xvalid)
@@ -68,6 +68,8 @@ def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
     title = "Train Err: " + "{:.2f}".format(100 - trainEfficiency) + "%" \
             + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
             + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%"
+    name = "regions_decision" + str(h) + "_" + str(wd) + "_" + str(maxIter)
+    utils.plotRegionsDescision(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, neuralNetwork, title, name,hparams)
 
 def exo67():
     print("\n\n>>EXERCICE 6 Calcul matriciel")
@@ -104,8 +106,6 @@ def main():
     exo67()
     #exo8()
 
-    name = "regions_decision" + str(h) + "_" + str(wd) + "_" + str(maxIter)
-    utils.plotRegionsDescision(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, neuralNetwork, title, name,hparams)
 
 if __name__ == '__main__':
     main()
