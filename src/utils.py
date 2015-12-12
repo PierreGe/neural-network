@@ -49,7 +49,7 @@ def onehot(m, Y):  # attention le y indice a partir de 0
     try:
         res = numpy.zeros((m, len(Y)))
         for i,y in enumerate(Y):
-            res[i][y] = 1
+            res[y][i] = 1
     except:
         res = numpy.zeros(m)
         res[Y] = 1

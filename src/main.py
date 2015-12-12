@@ -11,7 +11,7 @@ def exo1234():
     print("\n\n>>EXERCICE 1 et 2")
     sigma = 1e-4
     neuralNetwork = NeuralNetwork(2, 2, 2)
-    Xtrain = [0.4, 0.7]
+    Xtrain = [0.7, 0.7]
     ytrain = 1  # imaginons que c'est un point de la classe
     print("Liste des ratio W1, b1, W2, b2")
     res = verifGradient1d(neuralNetwork, Xtrain, ytrain)
@@ -20,17 +20,17 @@ def exo1234():
         np.array(res)).flatten()] else "Echec de la verif..")
 
     print("\n\n>>EXERCICE 3 et 4")
-    neuralNetwork = NeuralNetwork(2, 2, 2)
     Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile()
+    neuralNetwork = NeuralNetwork(len(Xtrain[0]), 5, utils.getClassCount(ytrain))
     K = 10
-    Xtrain = Xtrain[:K]
-    ytrain = ytrain[:K]
+    X = Xtrain[9]
+    y = ytrain[9]
 
     print("Liste des ratio W1, b1, W2, b2")
-    res = verifGradientKd(neuralNetwork, Xtrain, ytrain)
+    res = verifGradient1d(neuralNetwork, X, y)
     print(res)
     print(">Tout les ratio sont bien entre 0.99 et 1.01" if False not in [0.99 < i < 1.01 for i in (
-        np.array(res)).flatten()] else "Echec de la verif..")
+    np.array(res)).flatten()] else "Echec de la verif..")
 
 def exo5():
 
@@ -89,8 +89,8 @@ def exo67():
     nne.fprop(X)
     nne.bprop(X, y)
 
-    print(nn.computePredictions(X))
-    print(nne.computePredictions(X))
+    #print(nn.computePredictions(X))
+    #print(nne.computePredictions(X))
 
 
 def exo8():
@@ -121,6 +121,7 @@ def exo8():
     delta = t2 - t1
     print("Train Err: " + str(100 - trainEfficiency))
     print("Cela a mis : " + str(delta.total_seconds()) + " secondes")
+
 def exo9_10():
     print("\n\n>>EXERCICE 9-10")
     h = 30
@@ -138,51 +139,50 @@ def exo9_10():
 def test():
 
     Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile()
-    h = 10
+    h = 2
     wd = 0.0001
     maxIter = 1
 
-    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=50, wd=wd)
-    neuralNetworkEfficient = NeuralNetworkEfficient(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=50, wd=wd)
+    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=10, wd=wd)
+    neuralNetworkEfficient = NeuralNetworkEfficient(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=10, wd=wd)
     neuralNetworkEfficient._w1 = neuralNetwork._w1
     neuralNetworkEfficient._w2 = neuralNetwork._w2
-
     neuralNetwork.train(Xtrain, ytrain, maxIter)
-    predTrain = neuralNetwork.computePredictions(Xtrain)
-    predValid = neuralNetwork.computePredictions(Xvalid)
-    predTest = neuralNetwork.computePredictions(Xtest)
-    trainEfficiency = utils.calculatePredictionsEfficiency(predTrain, ytrain)
-    validEfficiency = utils.calculatePredictionsEfficiency(predValid, yvalid)
-    testEfficiency = utils.calculatePredictionsEfficiency(predTest, ytest)
-    print( "Train Err: " + "{:.2f}".format(100 - trainEfficiency) + "%" \
-            + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
-            + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%")
+    #predTrain = neuralNetwork.computePredictions(Xtrain)
+    #predValid = neuralNetwork.computePredictions(Xvalid)
+    #predTest = neuralNetwork.computePredictions(Xtest)
+    #trainEfficiency = utils.calculatePredictionsEfficiency(predTrain, ytrain)
+    #validEfficiency = utils.calculatePredictionsEfficiency(predValid, yvalid)
+    #testEfficiency = utils.calculatePredictionsEfficiency(predTest, ytest)
+    #print( "Train Err: " + "{:.2f}".format(100 - trainEfficiency) + "%" \
+    #        + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
+    #        + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%")
 
 
     neuralNetworkEfficient.train(Xtrain, ytrain, maxIter)
-    predTrain = neuralNetworkEfficient.computePredictions(Xtrain)
-    predValid = neuralNetworkEfficient.computePredictions(Xvalid)
-    predTest = neuralNetworkEfficient.computePredictions(Xtest)
-    trainEfficiency = utils.calculatePredictionsEfficiency(predTrain, ytrain)
-    validEfficiency = utils.calculatePredictionsEfficiency(predValid, yvalid)
-    testEfficiency = utils.calculatePredictionsEfficiency(predTest, ytest)
-    print( "Train Err: " + "{:.2f}".format(100 - trainEfficiency) + "%" \
-            + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
-            + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%")
+    #predTrain = neuralNetworkEfficient.computePredictions(Xtrain)
+    #predValid = neuralNetworkEfficient.computePredictions(Xvalid)
+    #predTest = neuralNetworkEfficient.computePredictions(Xtest)
+    #trainEfficiency = utils.calculatePredictionsEfficiency(predTrain, ytrain)
+    #validEfficiency = utils.calculatePredictionsEfficiency(predValid, yvalid)
+    #testEfficiency = utils.calculatePredictionsEfficiency(predTest, ytest)
+    #print( "Train Err: " + "{:.2f}".format(100 - trainEfficiency) + "%" \
+    #        + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
+    #        + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%")
 
 
 
 
 def main():
-    np.random.seed(0)
-    exo1234()
+    np.random.seed(123)
+    #exo1234()
     #exo5()
-    #exo67()
+    exo67()
     #exo8()
     #exo67()
     #exo8()
     #exo9_10()
-    #test()
+    test()
 
 if __name__ == '__main__':
     main()

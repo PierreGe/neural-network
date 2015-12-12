@@ -33,8 +33,6 @@ class NeuralNetworkEfficient(NeuralNetwork.NeuralNetwork):
         # gradw2 va être la somme des gradient pour chaque point individuelle
         self._gradw1 = np.dot(self._gradha, np.transpose(X)) #+ 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
-        print(self._gradb2)
-
 
 
     def computePredictions(self, X):
@@ -67,13 +65,15 @@ class NeuralNetworkEfficient(NeuralNetwork.NeuralNetwork):
 
             self.fprop(xbatch)
             self.bprop(xbatch, ybatch)
-            print(self._gradb2)
 
             norm = (1. / len(xbatch))
             self._w1 -= eta * (self._gradw1 * norm)
             self._w2 -= eta * (self._gradw2 * norm)
-            self._b1 -= eta * (np.array([[i] for i in (np.sum(self._gradb1, axis=0))]) * norm)
-            self._b2 -= eta * (np.array([[i] for i in (np.sum(self._gradb2, axis=0))]) * norm)
+            ub1 = np.sum(self._gradb1, axis=1) * norm
+            self._b1 -= eta * np.array([[i] for i in ub1])
+            ub2 = np.sum(self._gradb2, axis=1) * norm
+            self._b2 -= eta * np.array([[i] for i in ub2])
+            #print(self._gradb1)
             #print(self._w1,self._w2,self._b1,self._b2)
 
 

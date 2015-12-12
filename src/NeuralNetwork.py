@@ -63,7 +63,6 @@ class NeuralNetwork(object):
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
         #print(self._gradb2)
 
-
     def calculateLoss(self, y):
         return -(np.log(self._os[y][0]))
 
@@ -123,8 +122,8 @@ class NeuralNetwork(object):
 
                     self.fprop(X[elem])
                     self.bprop(X[elem], y[elem])
+                    #print(self._gradb1)
 
-                    print(self._gradb2)
 
                     nbrAverage+=1
                     w1update += self._gradw1
@@ -137,6 +136,7 @@ class NeuralNetwork(object):
                 self._w2 -= eta * (w2update/nbrAverage)
                 self._b1 -= eta * (b1update/nbrAverage)
                 self._b2 -= eta * (b2update/nbrAverage)
+                #print(self._w1,self._w2,self._b1,self._b2)
 
             self._calculateEfficiency()
 
