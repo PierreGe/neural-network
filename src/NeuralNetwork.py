@@ -61,22 +61,16 @@ class NeuralNetwork(object):
         self._gradb1 = np.array(self._gradha)
         self._gradw1 = np.dot(self._gradha,np.transpose(X)) #+ 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
-        print("Final slow")
-        print(self._gradoa)
-        print("end")
+        #print(self._gradb2)
+
 
     def calculateLoss(self, y):
         return -(np.log(self._os[y][0]))
 
     def predict(self, x):
         self.fprop(x)
-        klass = -1
-        maxVal = -1
 
-        for i in range(len(self._os)):
-            if self._os[i] > maxVal:
-                maxVal = self._os[i]
-                klass = i
+        klass = np.argmax(np.transpose(self._os)[0])
 
         return klass
 
@@ -84,15 +78,16 @@ class NeuralNetwork(object):
         predictions = []
 
         for x in X:
-            predictions.append(self.predict(x))
+            self.fprop(x)
+            predictions.append(np.argmax(np.transpose(self._os)[0]))
 
         return predictions
 
     def _nextBatchIndex(self, X, batchNbr):
-        correctedBatchNbr = batchNbr % len(X)/self._K
+        correctedBatchNbr = batchNbr % int(float(len(X))/self._K)
         size = len(X)
-        born1 = correctedBatchNbr * self._K
-        born2 = (correctedBatchNbr+1) * self._K
+        born1 = int(correctedBatchNbr * self._K + 0.001)
+        born2 = int((correctedBatchNbr+1) * self._K + 0.001)
         if born2 > size:
             born1 = 0
             born2 = self._K
@@ -128,6 +123,8 @@ class NeuralNetwork(object):
 
                     self.fprop(X[elem])
                     self.bprop(X[elem], y[elem])
+
+                    print(self._gradb2)
 
                     nbrAverage+=1
                     w1update += self._gradw1

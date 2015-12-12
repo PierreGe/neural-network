@@ -73,25 +73,38 @@ def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
 
 def exo67():
     print("\n\n>>EXERCICE 6 Calcul matriciel")
-    nn = NeuralNetwork(4, 6, 3)
-    nne = NeuralNetworkEfficient(4, 6, 3)
+    nn = NeuralNetwork(4, 6, 2)
+    nn2 = NeuralNetwork(4, 6, 2)
+    nne = NeuralNetworkEfficient(4, 6, 2)
     nne._w1 = nn._w1 # trick pour que l'aleatoire soit egale
     nne._w2 = nn._w2
+    nn2._w1 = nn._w1 # trick pour que l'aleatoire soit egale
+    nn2._w2 = nn._w2
     X = [[30, 20, 40, 50], [25, 15, 35, 45]]
-    y = [1,0]  # imaginons que c'est un point de la classe 3
+    y = [0,0]
     nn.fprop(X[0])
     nn.bprop(X[0],y[0])
+    nn.fprop(X[1])
+    nn.bprop(X[1],y[1])
     nne.fprop(X)
     nne.bprop(X, y)
 
+    print(nn.computePredictions(X))
+    print(nne.computePredictions(X))
+
+
 def exo8():
     print("\n\n>>EXERCICE 8 MNIST")
+    print("--- Normal NN ---")
     Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMNISTfile()
     default_h = 30
     default_wd = 0.0001
     maxIter = 300
-    t1 = datetime.now()
     neuralNetwork = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain),K=100, wd=default_wd)
+    neuralNetworkEfficient = NeuralNetworkEfficient(len(Xtrain[0]), default_h, utils.getClassCount(ytrain),K=100, wd=default_wd)
+    neuralNetworkEfficient._w1 = neuralNetwork._w1
+    neuralNetworkEfficient._w2 = neuralNetwork._w2
+    t1 = datetime.now()
     neuralNetwork.train(Xtrain, ytrain, maxIter)
     predictions = neuralNetwork.computePredictions(Xvalid)
     trainEfficiency = utils.calculatePredictionsEfficiency(predictions, yvalid)
@@ -99,7 +112,15 @@ def exo8():
     delta = t2 - t1
     print("Train Err: " + str(100 - trainEfficiency))
     print("Cela a mis : " + str(delta.total_seconds()) + " secondes")
-
+    print("--- Efficient NN ---")
+    t1 = datetime.now()
+    neuralNetworkEfficient.train(Xtrain, ytrain, maxIter)
+    predictions = neuralNetworkEfficient.computePredictions(Xvalid)
+    trainEfficiency = utils.calculatePredictionsEfficiency(predictions, yvalid)
+    t2 = datetime.now()
+    delta = t2 - t1
+    print("Train Err: " + str(100 - trainEfficiency))
+    print("Cela a mis : " + str(delta.total_seconds()) + " secondes")
 def exo9_10():
     print("\n\n>>EXERCICE 9-10")
     h = 30
@@ -114,17 +135,54 @@ def exo9_10():
 
     print "SUCCESS"
 
+def test():
+
+    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile()
+    h = 10
+    wd = 0.0001
+    maxIter = 1
+
+    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=50, wd=wd)
+    neuralNetworkEfficient = NeuralNetworkEfficient(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=50, wd=wd)
+    neuralNetworkEfficient._w1 = neuralNetwork._w1
+    neuralNetworkEfficient._w2 = neuralNetwork._w2
+
+    neuralNetwork.train(Xtrain, ytrain, maxIter)
+    predTrain = neuralNetwork.computePredictions(Xtrain)
+    predValid = neuralNetwork.computePredictions(Xvalid)
+    predTest = neuralNetwork.computePredictions(Xtest)
+    trainEfficiency = utils.calculatePredictionsEfficiency(predTrain, ytrain)
+    validEfficiency = utils.calculatePredictionsEfficiency(predValid, yvalid)
+    testEfficiency = utils.calculatePredictionsEfficiency(predTest, ytest)
+    print( "Train Err: " + "{:.2f}".format(100 - trainEfficiency) + "%" \
+            + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
+            + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%")
+
+
+    neuralNetworkEfficient.train(Xtrain, ytrain, maxIter)
+    predTrain = neuralNetworkEfficient.computePredictions(Xtrain)
+    predValid = neuralNetworkEfficient.computePredictions(Xvalid)
+    predTest = neuralNetworkEfficient.computePredictions(Xtest)
+    trainEfficiency = utils.calculatePredictionsEfficiency(predTrain, ytrain)
+    validEfficiency = utils.calculatePredictionsEfficiency(predValid, yvalid)
+    testEfficiency = utils.calculatePredictionsEfficiency(predTest, ytest)
+    print( "Train Err: " + "{:.2f}".format(100 - trainEfficiency) + "%" \
+            + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
+            + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%")
+
+
 
 
 def main():
     np.random.seed(0)
-    #exo1234()
+    exo1234()
     #exo5()
-    exo67()
+    #exo67()
     #exo8()
     #exo67()
-    exo8()
+    #exo8()
     #exo9_10()
+    #test()
 
 if __name__ == '__main__':
     main()
