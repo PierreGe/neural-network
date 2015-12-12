@@ -5,8 +5,7 @@ from gradientVerification import verifGradient1d, verifGradientKd
 import utils
 import numpy as np
 
-
-def main():
+def exo1234()
     print("\n\n>>EXERCICE 1 et 2")
     sigma = 1e-4
     neuralNetwork = NeuralNetwork(2, 2, 2)
@@ -30,6 +29,8 @@ def main():
     print(res)
     print(">Tout les ratio sont bien entre 0.99 et 1.01" if False not in [0.99 < i < 1.01 for i in (
         np.array(res)).flatten()] else "Echec de la verif..")
+
+def exo5():
 
     print("\n\n>>EXERCICE 5 Entrainement du reseau de neuronne + Variation des hyper-parametres")
     Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile()
@@ -77,6 +78,18 @@ def main():
         name = "regions_decision" + str(default_h) + "_" + str(default_wd) + "_" + str(maxIter)
         utils.plotRegionsDescision(Xtrain, ytrain, neuralNetwork, title, name)
 
+def exo6():
+    nn = NeuralNetwork(4, 6, 3)
+    X = [[30, 20, 45, 50], [20, 10, 35, 40]]
+    y = [1,0]  # imaginons que c'est un point de la classe 3
+    nn.fprop(X)
+
+    #nn.bprop(X, y)
+
+def main():
+    #exo1234()
+    #exo5()
+    exo6()
 
 if __name__ == '__main__':
     main()
