@@ -72,22 +72,30 @@ def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
     utils.plotRegionsDescision(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, neuralNetwork, title, name,hparams)
 
 def exo67():
-    print("\n\n>>EXERCICE 6 Calcul matriciel")
-    nn = NeuralNetwork(4, 6, 2)
-    nn2 = NeuralNetwork(4, 6, 2)
-    nne = NeuralNetworkEfficient(4, 6, 2)
+    print("\n\n>>EXERCICE 6 et 7 : Calcul matriciel")
+    print(" --- K=1 ---")
+    #Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile()
+    Xtrain = [[30, 20, 40, 50], [25, 15, 35, 45]]
+    ytrain = [0,0]
+    default_h = 2
+    nn = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), K=1)
+    nne = NeuralNetworkEfficient(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), K=1)
     nne._w1 = nn._w1 # trick pour que l'aleatoire soit egale
     nne._w2 = nn._w2
-    nn2._w1 = nn._w1 # trick pour que l'aleatoire soit egale
-    nn2._w2 = nn._w2
-    X = [[30, 20, 40, 50], [25, 15, 35, 45]]
-    y = [0,0]
-    nn.fprop(X[0])
-    nn.bprop(X[0],y[0])
-    nn.fprop(X[1])
-    nn.bprop(X[1],y[1])
-    nne.fprop(X)
-    nne.bprop(X, y)
+    nn.train(Xtrain,ytrain,1)
+    nne.train(Xtrain,ytrain,1)
+    utils.compareNN(nn,nne)
+    print(" --- K=10 ---")
+    Xtrain = [[30, 20, 40, 50], [25, 15, 35, 45],[30, 76, 45, 44],[89, 27, 42, 52],[30, 24, 44, 53],[89, 25, 45, 50],[30, 20, 40, 50],[30, 65, 47, 50],[30, 34, 40, 50],[39, 20, 29, 58]]
+    ytrain = [0,0,0,0,0,0,0,0,0,0]
+    default_h = 2
+    nn = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), K=10)
+    nne = NeuralNetworkEfficient(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), K=10)
+    nne._w1 = nn._w1 # trick pour que l'aleatoire soit egale
+    nne._w2 = nn._w2
+    nn.train(Xtrain,ytrain,1)
+    nne.train(Xtrain,ytrain,1)
+    utils.compareNN(nn,nne,10)
 
     #print(nn.computePredictions(X))
     #print(nne.computePredictions(X))
@@ -172,17 +180,17 @@ def test():
 
 
 
-
 def main():
     np.random.seed(123)
+
     #exo1234()
     #exo5()
-    exo67()
-    #exo8()
     #exo67()
     #exo8()
+    exo67()
+    #exo8()
     #exo9_10()
-    test()
+    #test()
 
 if __name__ == '__main__':
     main()

@@ -18,6 +18,7 @@ class NeuralNetworkEfficient(NeuralNetwork.NeuralNetwork):
         self._hs = utils.relu(self._ha)  # valeur hidden
         self._oa = np.dot(self._w2, self._hs) + np.repeat(self._b2, len(X[0]), axis=1)  # valeur entre hidden et sortie
         self._os = utils.softmax(self._oa)  # valeur de sortie
+        #print(self._ha)
 
     def bprop(self, X, y):
         # chaque colonne de X est une entrée
@@ -59,9 +60,7 @@ class NeuralNetworkEfficient(NeuralNetwork.NeuralNetwork):
             batchNbr+=1
             classificationErrorFound = False
 
-            born1, born2 = self._nextBatchIndex(X, batchNbr)
-            xbatch = X[born1:born2]
-            ybatch = y[born1:born2]
+            xbatch, ybatch = self._nextBatchIndex(X,y, batchNbr)
 
             self.fprop(xbatch)
             self.bprop(xbatch, ybatch)

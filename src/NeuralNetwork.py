@@ -61,7 +61,6 @@ class NeuralNetwork(object):
         self._gradb1 = np.array(self._gradha)
         self._gradw1 = np.dot(self._gradha,np.transpose(X)) #+ 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
-        #print(self._gradb2)
 
     def calculateLoss(self, y):
         return -(np.log(self._os[y][0]))
@@ -82,7 +81,7 @@ class NeuralNetwork(object):
 
         return predictions
 
-    def _nextBatchIndex(self, X, batchNbr):
+    def _nextBatchIndex(self, X,y, batchNbr):
         correctedBatchNbr = batchNbr % int(float(len(X))/self._K)
         size = len(X)
         born1 = int(correctedBatchNbr * self._K + 0.001)
@@ -90,7 +89,7 @@ class NeuralNetwork(object):
         if born2 > size:
             born1 = 0
             born2 = self._K
-        return born1, born2
+        return X[born1:born2],y[born1:born2]
 
     def train(self, X, y, maxIter, eta=0.01):
         """
@@ -107,41 +106,34 @@ class NeuralNetwork(object):
             batchNbr+=1
             classificationErrorFound = False
 
-            born1, born2 = self._nextBatchIndex(X, batchNbr)
+
+            xbatch, ybatch = self._nextBatchIndex(X,y, batchNbr)
 
             nbrAverage = 0
             w1update = 0
             w2update = 0
             b1update = 0
             b2update = 0
-            for elem in range(born1,born2):
-                prediction = self.predict(X[elem])
+            for elem in range(len(xbatch)):
 
-                if prediction != y[elem]:
-                    classificationErrorFound = True
-
-                    self.fprop(X[elem])
-                    self.bprop(X[elem], y[elem])
-                    #print(self._gradb1)
+                self.fprop(xbatch[elem])
+                self.bprop(xbatch[elem], ybatch[elem])
 
 
-                    nbrAverage+=1
-                    w1update += self._gradw1
-                    w2update += self._gradw2
-                    b1update += self._gradb1
-                    b2update += self._gradb2
+                nbrAverage+=1
+                w1update += self._gradw1
+                w2update += self._gradw2
+                b1update += self._gradb1
+                b2update += self._gradb2
 
             if nbrAverage > 0:
                 self._w1 -= eta * (w1update/nbrAverage)
                 self._w2 -= eta * (w2update/nbrAverage)
                 self._b1 -= eta * (b1update/nbrAverage)
                 self._b2 -= eta * (b2update/nbrAverage)
-                #print(self._w1,self._w2,self._b1,self._b2)
 
             self._calculateEfficiency()
 
-            if not classificationErrorFound:
-                break
 
     def _calculateEfficiency(self):
         if self.Xtrain is None:

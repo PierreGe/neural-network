@@ -161,3 +161,37 @@ def plotRegionsDescision(XTrain, yTrain, XValid, yValid, XTest, yTest, neuralNet
     plt.savefig(name + ".png")
     print("[Created] file : " + name + ".png")
     plt.close()
+
+
+def compareNN(nn1,nn2, K=1):
+
+    if K>1:
+        ub2 = numpy.sum(nn2._gradb2, axis=1) * K
+        gradb2 = numpy.array([[i] for i in ub2])
+    else:
+        gradb2= nn2._gradb2
+
+    if numpy.array_equal(nn1._gradb2, gradb2):
+        print("Test Ok : gradient b2")
+    else:
+        print("FAIL : gradient b2")
+
+    if numpy.array_equal(nn1._gradw2,nn2._gradw2):
+        print("Test Ok : gradient w2")
+    else:
+        print("FAIL : gradient w2")
+
+    if K>1:
+        ub1 = numpy.sum(nn2._gradb1, axis=1) * K
+        gradb1 = numpy.array([[i] for i in ub1])
+    else:
+        gradb1= nn2._gradb1
+    if numpy.array_equal(nn1._gradb1,gradb1):
+        print("Test Ok : gradient b1")
+    else:
+        print("FAIL : gradient b1")
+
+    if numpy.array_equal(nn1._gradw1,nn2._gradw1):
+        print("Test Ok : gradient w1")
+    else:
+        print("FAIL : gradient w1")
