@@ -103,31 +103,25 @@ def exo67():
 
 def exo8():
     print("\n\n>>EXERCICE 8 MNIST")
-    print("--- Normal NN ---")
+    print("--- Reseau de depart ---")
     Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMNISTfile()
     default_h = 30
     default_wd = 0.0001
-    maxIter = 300
+    maxIter = 1
     neuralNetwork = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain),K=100, wd=default_wd)
     neuralNetworkEfficient = NeuralNetworkEfficient(len(Xtrain[0]), default_h, utils.getClassCount(ytrain),K=100, wd=default_wd)
     neuralNetworkEfficient._w1 = neuralNetwork._w1
     neuralNetworkEfficient._w2 = neuralNetwork._w2
     t1 = datetime.now()
     neuralNetwork.train(Xtrain, ytrain, maxIter)
-    predictions = neuralNetwork.computePredictions(Xvalid)
-    trainEfficiency = utils.calculatePredictionsEfficiency(predictions, yvalid)
     t2 = datetime.now()
     delta = t2 - t1
-    print("Train Err: " + str(100 - trainEfficiency))
     print("Cela a mis : " + str(delta.total_seconds()) + " secondes")
-    print("--- Efficient NN ---")
+    print("--- Reseau optimise ---")
     t1 = datetime.now()
     neuralNetworkEfficient.train(Xtrain, ytrain, maxIter)
-    predictions = neuralNetworkEfficient.computePredictions(Xvalid)
-    trainEfficiency = utils.calculatePredictionsEfficiency(predictions, yvalid)
     t2 = datetime.now()
     delta = t2 - t1
-    print("Train Err: " + str(100 - trainEfficiency))
     print("Cela a mis : " + str(delta.total_seconds()) + " secondes")
 
 def exo9_10():
@@ -183,12 +177,10 @@ def test():
 def main():
     np.random.seed(123)
 
-    #exo1234()
+    exo1234()
     #exo5()
-    #exo67()
-    #exo8()
     exo67()
-    #exo8()
+    exo8()
     #exo9_10()
     #test()
 
