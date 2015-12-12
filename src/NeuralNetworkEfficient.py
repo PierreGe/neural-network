@@ -86,8 +86,14 @@ class NeuralNetworkEfficient(object):
             classificationErrorFound = False
 
             born1, born2 = self._nextBatchIndex(X, batchNbr)
-            for elem in range(born1,born2):
 
+            nbrAverage = 0
+            w1update = 0
+            w2update = 0
+            b1update = 0
+            b2update = 0
+            for elem in range(born1,born2):
+                nbrAverage+=1
                 prediction = self.predict(X[elem])
 
                 if prediction != y[elem]:
@@ -96,11 +102,15 @@ class NeuralNetworkEfficient(object):
                     self.fprop(X[elem])
                     self.bprop(X[elem], y[elem])
 
-                    self._w1 -= eta * self._gradw1
-                    self._w2 -= eta * self._gradw2
-                    self._b1 -= eta * self._gradb1
-                    self._b2 -= eta * self._gradb2
+                    w1update += self._gradw1
+                    w2update += self._gradw2
+                    b1update += self._gradb1
+                    b2update += self._gradb2
 
+            self._w1 -= eta * (w1update/nbrAverage)
+            self._w2 -= eta * (w2update/nbrAverage)
+            self._b1 -= eta * (b1update/nbrAverage)
+            self._b2 -= eta * (b2update/nbrAverage)
             if not classificationErrorFound:
                 break
 

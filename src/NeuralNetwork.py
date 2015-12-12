@@ -93,7 +93,6 @@ class NeuralNetwork(object):
             b1update = 0
             b2update = 0
             for elem in range(born1,born2):
-                nbrAverage+=1
                 prediction = self.predict(X[elem])
 
                 if prediction != y[elem]:
@@ -102,6 +101,7 @@ class NeuralNetwork(object):
                     self.fprop(X[elem])
                     self.bprop(X[elem], y[elem])
 
+                    nbrAverage+=1
                     w1update += self._gradw1
                     w2update += self._gradw2
                     b1update += self._gradb1

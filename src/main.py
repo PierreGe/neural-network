@@ -108,8 +108,8 @@ def exo8():
 def main():
     #exo1234()
     #exo5()
-    exo67()
-    #exo8()
+    #exo67()
+    exo8()
 
 if __name__ == '__main__':
     main()
