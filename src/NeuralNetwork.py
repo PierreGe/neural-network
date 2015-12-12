@@ -34,11 +34,13 @@ class NeuralNetwork(object):
         self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) + 2 * self.wd * self._w2
         self._gradhs = np.dot(np.transpose(self._w2), self._gradoa)
         self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
-        self._gradb1 = np.array([i for i in
-                                 self._gradha])
-        self._gradw1 = np.dot(self._gradha,
-                              np.transpose(X)) + 2 * self.wd * self._w1
+        self._gradb1 = np.array(self._gradha)
+        self._gradw1 = np.dot(self._gradha,np.transpose(X)) + 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
+
+        #print("Final gradx")
+        #print(self._gradx)
+        #print("end")
 
     def predict(self, x):
         self.fprop(x)
@@ -107,10 +109,11 @@ class NeuralNetwork(object):
                     b1update += self._gradb1
                     b2update += self._gradb2
 
-            self._w1 -= eta * (w1update/nbrAverage)
-            self._w2 -= eta * (w2update/nbrAverage)
-            self._b1 -= eta * (b1update/nbrAverage)
-            self._b2 -= eta * (b2update/nbrAverage)
+            if nbrAverage > 0:
+                self._w1 -= eta * (w1update/nbrAverage)
+                self._w2 -= eta * (w2update/nbrAverage)
+                self._b1 -= eta * (b1update/nbrAverage)
+                self._b2 -= eta * (b2update/nbrAverage)
             if not classificationErrorFound:
                 break
 
