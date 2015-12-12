@@ -35,17 +35,17 @@ def main():
     Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile()
 
     default_h = 5
-    sample_h = [2, 5, 10, 50, 100]
+    sample_h = [2, 5, 10, 50]
 
     default_wd = 0.1
     sample_wd = [0, 0.00001, 0.0001, 0.001,
                  0.01]  # todo Valider terme de regularisation dans NeuralNetwork. Lorsque != 0, validations #1,2,3,4 ne sont plus bon...
 
     default_maxIter = 5
-    sample_maxIter = [1, 2, 5, 10, 20]
+    sample_maxIter = [1, 2, 5, 10, 20, 100, 200]
 
     for h in sample_h:
-        neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), default_wd)
+        neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), wd=default_wd)
         neuralNetwork.train(Xtrain, ytrain, default_maxIter)
         predictions = neuralNetwork.computePredictions(Xvalid)
 
@@ -56,7 +56,7 @@ def main():
         utils.plotRegionsDescision(Xtrain, ytrain, neuralNetwork, title, name)
 
     for wd in sample_wd:
-        neuralNetwork = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), wd)
+        neuralNetwork = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), wd=wd)
         neuralNetwork.train(Xtrain, ytrain, default_maxIter)
         predictions = neuralNetwork.computePredictions(Xvalid)
 
@@ -67,7 +67,7 @@ def main():
         utils.plotRegionsDescision(Xtrain, ytrain, neuralNetwork, title, name)
 
     for maxIter in sample_maxIter:
-        neuralNetwork = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), default_wd)
+        neuralNetwork = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), wd=default_wd)
         neuralNetwork.train(Xtrain, ytrain, maxIter)
         predictions = neuralNetwork.computePredictions(Xvalid)
 

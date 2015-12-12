@@ -6,7 +6,7 @@ import numpy as np
 class NeuralNetwork(object):
     """docstring for NeuralNetwork"""
 
-    def __init__(self, d, h, m, wd=0):
+    def __init__(self, d, h, m, K=50, wd=0):
         self._d = d
         self._h = h
         self._m = m
@@ -17,7 +17,7 @@ class NeuralNetwork(object):
         self._b1 = np.array([[0.] for i in range(h)])  # h
         self._b2 = np.array([[0.] for i in range(m)])  # m
 
-        # self._K = 0.2 # hyperparametre K  ???
+        self._K = K #
 
     def fprop(self, X):
         X = np.array([[float(x)] for x in X])
@@ -31,13 +31,13 @@ class NeuralNetwork(object):
         self._gradoa = np.array([i[0] for i in self._os]) - utils.onehot(self._m,y)
         self._gradoa = np.array([[i] for i in self._gradoa]) # obtenir un vecteur colonne
         self._gradb2 = self._gradoa
-        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) + 2 * self.wd * self._w2  # todo verifer ajout terme regularisation
+        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) + 2 * self.wd * self._w2
         self._gradhs = np.dot(np.transpose(self._w2), self._gradoa)
         self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
         self._gradb1 = np.array([i for i in
                                  self._gradha])
         self._gradw1 = np.dot(self._gradha,
-                              np.transpose(X)) + 2 * self.wd * self._w1  # todo verifer ajout terme regularisation
+                              np.transpose(X)) + 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
 
     def predict(self, x):
@@ -60,6 +60,16 @@ class NeuralNetwork(object):
 
         return predictions
 
+    def _nextBatchIndex(self, X, batchNbr):
+        correctedBatchNbr = batchNbr % len(X)/self._K
+        size = len(X)
+        born1 = batchNbr * self._K
+        born2 = (batchNbr+1) * self._K
+        if born2 > size:
+            born1 = 0
+            born2 = self._K
+        return born1, born2
+
     def train(self, X, y, maxIter, eta=0.01):
         """
         :param X: données d'entrainement
@@ -70,11 +80,13 @@ class NeuralNetwork(object):
         :param eta: Taille du pas
         :return:
         """
-
+        batchNbr = 0
         for iter in range(maxIter):
+            batchNbr+=1
             classificationErrorFound = False
 
-            for elem in range(len(X)):
+            born1, born2 = self._nextBatchIndex(X, batchNbr)
+            for elem in range(born1,born2):
 
                 prediction = self.predict(X[elem])
 
