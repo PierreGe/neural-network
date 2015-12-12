@@ -100,6 +100,21 @@ def exo8():
     print("Train Err: " + str(100 - trainEfficiency))
     print("Cela a mis : " + str(delta.total_seconds()) + " secondes")
 
+def exo9_10():
+    print("\n\n>>EXERCICE 9-10")
+    h = 30
+    wd = 0.0001
+    maxIter = 10
+    K = 10
+
+    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile(15,15)
+    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K, wd)
+    neuralNetwork.setDataSets(Xtrain, Xvalid, Xtest, ytrain, yvalid, ytest)
+    neuralNetwork.train(Xtrain, ytrain, maxIter)
+
+    print "SUCCESS"
+
+
 
 def main():
     np.random.seed(0)
@@ -107,7 +122,9 @@ def main():
     #exo5()
     exo67()
     #exo8()
-
+    #exo67()
+    exo8()
+    #exo9_10()
 
 if __name__ == '__main__':
     main()

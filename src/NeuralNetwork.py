@@ -19,6 +19,31 @@ class NeuralNetwork(object):
 
         self._K = K #
 
+        #Erreurs pour chaque epoque
+        self.trainError = []
+        self.validError = []
+        self.testError = []
+
+        #Somme du cout optimise total (somme des L encourus) pour chaque epoque
+        self.trainSumL = []
+        self.validSumL = []
+        self.testSumL = []
+
+        self.Xtrain = None
+        self.Xvalid = None
+        self.Xtest = None
+        self.ytrain = None
+        self.yvalid = None
+        self.ytest = None
+
+    def setDataSets(self, Xtrain, Xvalid, Xtest, ytrain, yvalid, ytest):
+        self.Xtrain = Xtrain
+        self.Xvalid = Xvalid
+        self.Xtest = Xtest
+        self.ytrain = ytrain
+        self.yvalid = yvalid
+        self.ytest = ytest
+
     def fprop(self, X):
         X = np.array([[float(x)] for x in X])
         self._ha = np.dot(self._w1, X) + self._b1  # valeur des synapses entre x et hidden
@@ -36,10 +61,12 @@ class NeuralNetwork(object):
         self._gradb1 = np.array(self._gradha)
         self._gradw1 = np.dot(self._gradha,np.transpose(X)) #+ 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
-
         print("Final slow")
         print(self._gradoa)
         print("end")
+
+    def calculateLoss(self, y):
+        return -(np.log(self._os[y][0]))
 
     def predict(self, x):
         self.fprop(x)
@@ -113,9 +140,22 @@ class NeuralNetwork(object):
                 self._w2 -= eta * (w2update/nbrAverage)
                 self._b1 -= eta * (b1update/nbrAverage)
                 self._b2 -= eta * (b2update/nbrAverage)
+
+            self._calculateEfficiency()
+
             if not classificationErrorFound:
                 break
 
+    def _calculateEfficiency(self):
+        if self.Xtrain is None:
+            pass
+        else:
+            predTrain = self.computePredictions(self.Xtrain)
+            predValid = self.computePredictions(self.Xvalid)
+            predTest = self.computePredictions(self.Xtest)
+            self.trainError.append(1-utils.calculatePredictionsEfficiency(predTrain, self.ytrain))
+            self.validError.append(utils.calculatePredictionsEfficiency(predValid, self.yvalid))
+            self.testError.append(utils.calculatePredictionsEfficiency(predTest, self.ytest))
 
 if __name__ == '__main__':
     self = NeuralNetwork(4, 6, 3)
