@@ -5,10 +5,23 @@ import gzip, pickle
 
 def softmax(vec):
     """ ok"""
-    max_vec = max(0, numpy.max(vec))
-    rebased_q = [q - max_vec for q in vec]
-    norm = 1. / numpy.sum(numpy.exp(rebased_q))
-    return numpy.multiply(norm, numpy.exp(rebased_q))
+    if len(vec[0]) == 1:
+        print("vec1 b")
+        print(vec)
+        print("vec1 e")
+        max_vec = max(0, numpy.max(vec))
+        rebased_q = [q - max_vec for q in vec]
+        norm = 1. / numpy.sum(numpy.exp(rebased_q))
+        return numpy.multiply(norm, numpy.exp(rebased_q))
+    else:
+        print(vec)
+        matrix = numpy.transpose(vec)
+        print(matrix)
+        res = []
+        for i in matrix:
+            v = numpy.array([[j] for j in i])
+            res.append(softmax(v))
+        return numpy.array(res)
 
 
 def uniform(nc):
