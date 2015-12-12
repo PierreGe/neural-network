@@ -16,7 +16,16 @@ def softmax(vec):
         for i in matrix:
             v = numpy.array([[j] for j in i])
             res.append(softmax(v))
-        return numpy.array(res)
+
+        res2 = []
+        for colonne in res:
+            temp = []
+            for element in colonne:
+                temp.append(element[0])
+            res2.append(temp)
+        res2 = numpy.array(res2)
+        res2 = numpy.transpose(res2)
+        return res2
 
 
 def uniform(nc):
@@ -38,12 +47,13 @@ def relu(M):
 
 def onehot(m, Y):  # attention le y indice a partir de 0
     try:
-        res = numpy.zeros(m, len(Y))
+        res = numpy.zeros((m, len(Y)))
         for i,y in enumerate(Y):
             res[i][y] = 1
     except:
         res = numpy.zeros(m)
         res[Y] = 1
+        res = [[i] for i in res] # vecteur colonne
     return res
 
 

@@ -75,13 +75,14 @@ def exo67():
     print("\n\n>>EXERCICE 6 Calcul matriciel")
     nn = NeuralNetwork(4, 6, 3)
     nne = NeuralNetworkEfficient(4, 6, 3)
-    nne._w1 = nn._w1
+    nne._w1 = nn._w1 # trick pour que l'aleatoire soit egale
     nne._w2 = nn._w2
     X = [[30, 20, 40, 50], [25, 15, 35, 45]]
     y = [1,0]  # imaginons que c'est un point de la classe 3
-    nne.fprop(X)
     nn.fprop(X[0])
-    #nn.bprop(X, y)
+    nn.bprop(X[0],y[0])
+    nne.fprop(X)
+    nne.bprop(X, y)
 
 def exo8():
     print("\n\n>>EXERCICE 8 MNIST")
@@ -101,8 +102,9 @@ def exo8():
 
 
 def main():
+    np.random.seed(0)
     #exo1234()
-    exo5()
+    #exo5()
     exo67()
     #exo8()
 

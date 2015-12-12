@@ -28,18 +28,21 @@ class NeuralNetworkEfficient(object):
         self._os = utils.softmax(self._oa)  # valeur de sortie
 
     def bprop(self, X, y):
-        X = np.array([[float(x)] for x in X])
-        self._gradoa = np.array([i[0] for i in self._os]) - utils.onehot(self._m,y)
-        self._gradoa = np.array([[i] for i in self._gradoa]) # obtenir un vecteur colonne
+        print("BPROP EFFICIENT")
+        X = np.array([np.array([float(x) for x in j]) for j in X])
+        X = X.transpose()
+        self._gradoa = self._os - utils.onehot(self._m,y)
         self._gradb2 = self._gradoa
-        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) + 2 * self.wd * self._w2
+        #self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) #+ 2 * self.wd * self._w2
         self._gradhs = np.dot(np.transpose(self._w2), self._gradoa)
         self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
-        self._gradb1 = np.array([i for i in
-                                 self._gradha])
-        self._gradw1 = np.dot(self._gradha,
-                              np.transpose(X)) + 2 * self.wd * self._w1
+        self._gradb1 = np.array(self._gradha)
+        #self._gradw1 = np.dot(self._gradha, np.transpose(X)) #+ 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
+
+        print("Final gradx")
+        print(self._gradoa)
+        print("end")
 
     def predict(self, x):
         self.fprop(x)
