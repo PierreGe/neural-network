@@ -60,7 +60,7 @@ def calculatePredictionsEfficiency(preds, trueVals):
     return 100.0 * success / len(trueVals)
 
 
-def readMoonFile():
+def readMoonFile(validationSizePercent = 15, testSizePercent= 15):
     lines = open("data/2moons.txt").readlines()
     X = []
     y = []
@@ -68,7 +68,18 @@ def readMoonFile():
         x1, x2, klass = l.split()
         X.append([float(x1), float(x2)])
         y.append(int(klass))
-    return X, y
+    size = len(X)
+    born1 = int(size * ((100. - validationSizePercent - testSizePercent)/100))
+    born2 = int(size * ((100. - testSizePercent)/100))
+    Xtrain = X[:born1]  #: matrice de train data
+    ytrain = y[:born1]  #: vecteur des train labels
+
+    Xvalid = X[born1:born2]  #: matrice de valid data
+    yvalid = y[born1:born2]  #: vecteur des valid labels
+
+    Xtest = X[born2:]  #: matrice de test data
+    ytest = y[born2:]  #: vecteur des test labels
+    return Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest
 
 
 def readMNISTfile():
