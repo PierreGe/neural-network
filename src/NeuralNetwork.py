@@ -63,8 +63,8 @@ class NeuralNetwork(object):
     def _nextBatchIndex(self, X, batchNbr):
         correctedBatchNbr = batchNbr % len(X)/self._K
         size = len(X)
-        born1 = batchNbr * self._K
-        born2 = (batchNbr+1) * self._K
+        born1 = correctedBatchNbr * self._K
+        born2 = (correctedBatchNbr+1) * self._K
         if born2 > size:
             born1 = 0
             born2 = self._K
