@@ -5,10 +5,18 @@ import gzip, pickle
 
 def softmax(vec):
     """ ok"""
-    max_vec = max(0, numpy.max(vec))
-    rebased_q = [q - max_vec for q in vec]
-    norm = 1. / numpy.sum(numpy.exp(rebased_q))
-    return numpy.multiply(norm, numpy.exp(rebased_q))
+    if len(vec[0]) == 1:
+        max_vec = max(0, numpy.max(vec))
+        rebased_q = [q - max_vec for q in vec]
+        norm = 1. / numpy.sum(numpy.exp(rebased_q))
+        return numpy.multiply(norm, numpy.exp(rebased_q))
+    else:
+        matrix = numpy.transpose(vec)
+        res = []
+        for i in matrix:
+            v = numpy.array([[j] for j in i])
+            res.append(softmax(v))
+        return numpy.array(res)
 
 
 def uniform(nc):
@@ -28,9 +36,14 @@ def relu(M):
         return numpy.array([max(0, val) for val in M])
 
 
-def onehot(m, y):  # attention le y indice a partir de 0
-    res = numpy.zeros(m)
-    res[y] = 1
+def onehot(m, Y):  # attention le y indice a partir de 0
+    try:
+        res = numpy.zeros(m, len(Y))
+        for i,y in enumerate(Y):
+            res[i][y] = 1
+    except:
+        res = numpy.zeros(m)
+        res[Y] = 1
     return res
 
 

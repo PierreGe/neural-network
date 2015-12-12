@@ -59,10 +59,8 @@ class NeuralNetwork(object):
         self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) + 2 * self.wd * self._w2
         self._gradhs = np.dot(np.transpose(self._w2), self._gradoa)
         self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
-        self._gradb1 = np.array([i for i in
-                                 self._gradha])
-        self._gradw1 = np.dot(self._gradha,
-                              np.transpose(X)) + 2 * self.wd * self._w1
+        self._gradb1 = np.array(self._gradha)
+        self._gradw1 = np.dot(self._gradha,np.transpose(X)) + 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
 
     def calculateLoss(self, y):
@@ -140,8 +138,14 @@ class NeuralNetwork(object):
             self._b1 -= eta * (b1update/nbrAverage)
             self._b2 -= eta * (b2update/nbrAverage)
 
-            self._calculateEfficiency()
+            if nbrAverage > 0:
+                self._w1 -= eta * (w1update/nbrAverage)
+                self._w2 -= eta * (w2update/nbrAverage)
+                self._b1 -= eta * (b1update/nbrAverage)
+                self._b2 -= eta * (b2update/nbrAverage)
 
+			self._calculateEfficiency()
+	
             if not classificationErrorFound:
                 break
 
