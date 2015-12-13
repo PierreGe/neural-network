@@ -133,27 +133,30 @@ def exo9_10():
     maxIter = 15
     K = 50
 
-    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMNISTfile()    #todo replace by MNIST
-    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K, wd)
-    neuralNetwork.setDataSets(Xtrain, Xvalid, Xtest, ytrain, yvalid, ytest)
-    neuralNetwork.train(Xtrain, ytrain, maxIter)
+    for h in [10,30,50,100]:
+        for wd in [0.0001, 0, 0.00001, 0.001]:
+            for K in [10,50,100,300]:
+                Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMNISTfile()    #todo replace by MNIST
+                neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K, wd)
+                neuralNetwork.setDataSets(Xtrain, Xvalid, Xtest, ytrain, yvalid, ytest)
+                neuralNetwork.train(Xtrain, ytrain, maxIter)
 
-    epochsData = ""
-    for d in neuralNetwork.epochData:
-        epochsData += d+"\n"
+                epochsData = ""
+                for d in neuralNetwork.epochData:
+                    epochsData += d+"\n"
 
-    f = open('no9.txt', 'w')
-    f.write(epochsData)
-    f.close()
+                f = open('no9.txt', 'w')
+                f.write(epochsData)
+                f.close()
 
-    x = range(1, maxIter+1)
-    title = "Taux d'erreur - "+str(maxIter)+" epoques"
-    name = "taux_erreur"
-    utils.plotCourbeApprentissage(neuralNetwork.trainError, neuralNetwork.validError, neuralNetwork.testError, x, title, name)
+                x = range(1, maxIter+1)
+                title = "Taux d'erreur - "+str(maxIter)+" epoques"
+                name = str(K) + "_" + str(wd)+ "_" + str(h)+ "_" + "taux_erreur"
+                utils.plotCourbeApprentissage(neuralNetwork.trainError, neuralNetwork.validError, neuralNetwork.testError, x, title, name)
 
-    title = "Cout moyen - "+str(maxIter)+" epoques"
-    name = "cout_moyen"
-    utils.plotCourbeApprentissage(neuralNetwork.trainSumL, neuralNetwork.validSumL, neuralNetwork.testSumL, x, title, name)
+                title = "Cout moyen - "+str(maxIter)+" epoques"
+                name = str(K) + "_" + str(wd)+ "_" + str(h)+ "_" +"cout_moyen"
+                utils.plotCourbeApprentissage(neuralNetwork.trainSumL, neuralNetwork.validSumL, neuralNetwork.testSumL, x, title, name)
 
 
 def test():
