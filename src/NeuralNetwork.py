@@ -56,11 +56,11 @@ class NeuralNetwork(object):
         X = np.array([[float(x)] for x in X])
         self._gradoa = self._os - utils.onehot(self._m,y)
         self._gradb2 = self._gradoa
-        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) #+ 2 * self.wd * self._w2
+        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) + 2 * self.wd * self._w2
         self._gradhs = np.dot(np.transpose(self._w2), self._gradoa)
         self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
         self._gradb1 = np.array(self._gradha)
-        self._gradw1 = np.dot(self._gradha,np.transpose(X)) #+ 2 * self.wd * self._w1
+        self._gradw1 = np.dot(self._gradha,np.transpose(X)) + 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
 
     def calculateLoss(self, y):

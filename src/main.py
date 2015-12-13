@@ -32,29 +32,6 @@ def exo1234():
     print(">Tout les ratio sont bien entre 0.99 et 1.01" if False not in [0.99 < i < 1.01 for i in (
     np.array(res)).flatten()] else "Echec de la verif..")
 
-def exo5():
-
-    print("\n\n>>EXERCICE 5 Entrainement du reseau de neuronne + Variation des hyper-parametres")
-    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile()
-
-    default_h = 5
-    sample_h = [2, 5, 10, 50]
-
-    default_wd = 0.1
-    sample_wd = [0, 0.00001, 0.0001, 0.001, 0.01]
-
-    default_maxIter = 5
-    sample_maxIter = [1, 2, 5, 10, 20, 100, 200]
-
-    for h in sample_h:
-        trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, default_wd, default_maxIter)
-
-    for wd in sample_wd:
-        trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, default_h, wd, default_maxIter)
-
-    for maxIter in sample_maxIter:
-        trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, default_h, default_wd, maxIter)
-
 def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
     neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=50, wd=wd)
     neuralNetwork.train(Xtrain, ytrain, maxIter)
@@ -71,6 +48,21 @@ def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
     name = "regions_decision" + str(h) + "_" + str(wd) + "_" + str(maxIter)
     utils.plotRegionsDescision(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, neuralNetwork, title, name,hparams)
 
+def exo5():
+
+    print("\n\n>>EXERCICE 5 Entrainement du reseau de neuronne + Variation des hyper-parametres")
+    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile()
+
+    sample_h = [2, 20, 100, 400]
+    sample_wd = [0, 0.0001, 0.01]
+    sample_maxIter = [2, 50, 200, 500]
+
+    for h in sample_h:
+        for wd in sample_wd:
+            for maxIter in sample_maxIter:
+                trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, h, maxIter)
+
+
 def exo67():
     print("\n\n>>EXERCICE 6 et 7 : Calcul matriciel")
     print(" --- K=1 ---")
@@ -78,8 +70,8 @@ def exo67():
     Xtrain = [[30, 20, 40, 50], [25, 15, 35, 45]]
     ytrain = [0,0]
     default_h = 2
-    nn = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), K=1)
-    nne = NeuralNetworkEfficient(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), K=1)
+    nn = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), K=1, wd=0)
+    nne = NeuralNetworkEfficient(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), K=1, wd=0)
     nne._w1 = nn._w1 # trick pour que l'aleatoire soit egale
     nne._w2 = nn._w2
     nn.train(Xtrain,ytrain,1)
@@ -89,8 +81,8 @@ def exo67():
     Xtrain = [[30, 20, 40, 50], [25, 15, 35, 45],[30, 76, 45, 44],[89, 27, 42, 52],[30, 24, 44, 53],[89, 25, 45, 50],[30, 20, 40, 50],[30, 65, 47, 50],[30, 34, 40, 50],[39, 20, 29, 58]]
     ytrain = [0,0,0,0,0,0,0,0,0,0]
     default_h = 2
-    nn = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), K=10)
-    nne = NeuralNetworkEfficient(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), K=10)
+    nn = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), K=10, wd=0)
+    nne = NeuralNetworkEfficient(len(Xtrain[0]), default_h, utils.getClassCount(ytrain), K=10, wd=0)
     nne._w1 = nn._w1 # trick pour que l'aleatoire soit egale
     nne._w2 = nn._w2
     nn.train(Xtrain,ytrain,1)
@@ -103,15 +95,14 @@ def exo67():
 
 def exo8():
     print("\n\n>>EXERCICE 8 MNIST")
-    print("--- Reseau de depart ---")
     Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMNISTfile()
     default_h = 30
-    default_wd = 0.0001
     maxIter = 1
-    neuralNetwork = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain),K=100, wd=default_wd)
-    neuralNetworkEfficient = NeuralNetworkEfficient(len(Xtrain[0]), default_h, utils.getClassCount(ytrain),K=100, wd=default_wd)
+    neuralNetwork = NeuralNetwork(len(Xtrain[0]), default_h, utils.getClassCount(ytrain),K=100)
+    neuralNetworkEfficient = NeuralNetworkEfficient(len(Xtrain[0]), default_h, utils.getClassCount(ytrain),K=100)
     neuralNetworkEfficient._w1 = neuralNetwork._w1
     neuralNetworkEfficient._w2 = neuralNetwork._w2
+    print("--- Reseau de depart ---")
     t1 = datetime.now()
     neuralNetwork.train(Xtrain, ytrain, maxIter)
     t2 = datetime.now()
@@ -159,12 +150,13 @@ def exo9_10():
 def test():
 
     Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMNISTfile()
-    h = 100
+    h = 200
     wd = 0.0001
+    K = 200
     maxIter = 500
 
     # neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=10, wd=wd)
-    neuralNetworkEfficient = NeuralNetworkEfficient(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=10, wd=wd)
+    neuralNetworkEfficient = NeuralNetworkEfficient(len(Xtrain[0]), h, utils.getClassCount(ytrain), K, wd=wd)
     # neuralNetworkEfficient._w1 = neuralNetwork._w1
     # neuralNetworkEfficient._w2 = neuralNetwork._w2
     # neuralNetwork.train(Xtrain, ytrain, maxIter)
@@ -195,7 +187,7 @@ def test():
 def main():
     np.random.seed(123)
     exo1234()
-    #exo5()
+    exo5()
     exo67()
     exo8()
     #exo9_10()
