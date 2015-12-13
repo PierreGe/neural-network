@@ -1,5 +1,6 @@
 import numpy
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import gzip, pickle
 
 
@@ -162,6 +163,18 @@ def plotRegionsDescision(XTrain, yTrain, XValid, yValid, XTest, yTest, neuralNet
     print("[Created] file : " + name + ".png")
     plt.close()
 
+def plotCourbeApprentissage(train, valid, test, x, title, name):
+    plt.plot(x, train, label="Train")
+    plt.plot(x, valid, label="Validation")
+    plt.plot(x, test, label="Test")
+    plt.title(title)
+    plt.legend()
+
+    #plt.show()
+
+    plt.savefig(name + ".png")
+    print("[Created] file : " + name + ".png")
+    plt.close()
 
 def compareNN(nn1,nn2, K=1):
 

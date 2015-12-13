@@ -35,6 +35,7 @@ class NeuralNetwork(object):
         self.ytrain = None
         self.yvalid = None
         self.ytest = None
+        self.epochData = []
 
     def setDataSets(self, Xtrain, Xvalid, Xtest, ytrain, yvalid, ytest):
         self.Xtrain = Xtrain
@@ -63,7 +64,7 @@ class NeuralNetwork(object):
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
 
     def calculateLoss(self, y):
-        return -(np.log(self._os[y][0])[0])
+        return -(np.log(self._os[y][0]))
 
     def predict(self, x):
         self.fprop(x)
@@ -106,10 +107,7 @@ class NeuralNetwork(object):
             batchNbr+=1
             classificationErrorFound = False
 
-
             xbatch, ybatch = self._nextBatchIndex(X,y, batchNbr)
-
-            sumL = 0 #Somme des pertes
 
             nbrAverage = 0
             w1update = 0
@@ -121,14 +119,11 @@ class NeuralNetwork(object):
                 self.fprop(xbatch[elem])
                 self.bprop(xbatch[elem], ybatch[elem])
 
-
                 nbrAverage+=1
                 w1update += self._gradw1
                 w2update += self._gradw2
                 b1update += self._gradb1
                 b2update += self._gradb2
-
-                    sumL += self.calculateLoss(y) #todo ?????????????
 
             if nbrAverage > 0:
                 self._w1 -= eta * (w1update/nbrAverage)
@@ -136,8 +131,10 @@ class NeuralNetwork(object):
                 self._b1 -= eta * (b1update/nbrAverage)
                 self._b2 -= eta * (b2update/nbrAverage)
 
+            #Pour #9-10
             self._calculateEfficiency()
-            self.trainSumL.append(sumL)
+            self._calculateAverageCosts()
+            print self.epochData[len(self.epochData)-1]
 
 
     def _calculateEfficiency(self):
@@ -147,9 +144,42 @@ class NeuralNetwork(object):
             predTrain = self.computePredictions(self.Xtrain)
             predValid = self.computePredictions(self.Xvalid)
             predTest = self.computePredictions(self.Xtest)
+
             self.trainError.append(100-utils.calculatePredictionsEfficiency(predTrain, self.ytrain))
+            self.epochData.append("{:.3f}".format(self.trainError[len(self.trainError)-1]))
+
             self.validError.append(100-utils.calculatePredictionsEfficiency(predValid, self.yvalid))
+            self.epochData[len(self.epochData)-1] += ";"+"{:.3f}".format(self.validError[len(self.validError)-1])
+
             self.testError.append(100-utils.calculatePredictionsEfficiency(predTest, self.ytest))
+            self.epochData[len(self.epochData)-1] += ";"+"{:.3f}".format(self.testError[len(self.testError)-1])
+
+
+    def _calculateAverageCosts(self):
+        if self.Xtrain is None or self.Xvalid is None or self.Xtest is None:
+            pass
+        else:
+            #Calcule coût moyen sur ensemble d'entrainement, de test et de validation
+            sumLTrain = 0
+            for i in range(len(self.Xtrain)):
+                self.fprop(self.Xtrain[i])
+                sumLTrain += self.calculateLoss(self.ytrain[i])
+            self.trainSumL.append(sumLTrain/len(self.Xtrain))
+            self.epochData[len(self.epochData)-1] += ";"+"{:.3f}".format(self.trainSumL[len(self.trainSumL)-1])
+
+            sumLValid = 0
+            for i in range(len(self.Xvalid)):
+                self.fprop(self.Xvalid[i])
+                sumLValid += self.calculateLoss(self.yvalid[i])
+            self.validSumL.append(sumLValid/len(self.yvalid))
+            self.epochData[len(self.epochData)-1] += ";"+"{:.3f}".format(self.validSumL[len(self.validSumL)-1])
+
+            sumLTest = 0
+            for i in range(len(self.Xtest)):
+                self.fprop(self.Xtest[i])
+                sumLTest += self.calculateLoss(self.ytest[i])
+            self.testSumL.append(sumLTest/len(self.ytest))
+            self.epochData[len(self.epochData)-1] += ";"+"{:.3f}".format(self.testSumL[len(self.testSumL)-1])
 
 if __name__ == '__main__':
     self = NeuralNetwork(4, 6, 3)

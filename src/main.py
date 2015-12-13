@@ -126,6 +126,8 @@ def exo8():
 
 def exo9_10():
     print("\n\n>>EXERCICE 9-10")
+    print("Train Err;Valid Err;Test Err;Avg Cost Train;Avg Cost Valid;Avg Cost Test")
+
     h = 30
     wd = 0.0001
     maxIter = 10
@@ -136,10 +138,23 @@ def exo9_10():
     neuralNetwork.setDataSets(Xtrain, Xvalid, Xtest, ytrain, yvalid, ytest)
     neuralNetwork.train(Xtrain, ytrain, maxIter)
 
-    print neuralNetwork.trainError
-    print neuralNetwork.validError
-    print neuralNetwork.testError
-    print neuralNetwork.trainSumL
+    epochsData = ""
+    for d in neuralNetwork.epochData:
+        epochsData += d+"\n"
+
+    f = open('no9.txt', 'w')
+    f.write(epochsData)
+    f.close()
+
+    x = range(1, maxIter+1)
+    title = "Taux d'erreur - "+str(maxIter)+" epoques"
+    name = "taux_erreur"
+    utils.plotCourbeApprentissage(neuralNetwork.trainError, neuralNetwork.validError, neuralNetwork.testError, x, title, name)
+
+    title = "Cout moyen - "+str(maxIter)+" epoques"
+    name = "cout_moyen"
+    utils.plotCourbeApprentissage(neuralNetwork.trainSumL, neuralNetwork.validSumL, neuralNetwork.testSumL, x, title, name)
+
 
 def test():
 
@@ -180,11 +195,11 @@ def test():
 def main():
     np.random.seed(123)
 
-    exo1234()
+    #exo1234()
     #exo5()
-    exo67()
-    exo8()
-    #exo9_10()
+    #exo67()
+    #exo8()
+    exo9_10()
     #test()
 
 if __name__ == '__main__':
