@@ -106,12 +106,15 @@ def exo9_10():
     maxIter = 10
     K = 10
 
-    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile(15,15)
+    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile(15,15)    #todo replace by MNIST
     neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K, wd)
     neuralNetwork.setDataSets(Xtrain, Xvalid, Xtest, ytrain, yvalid, ytest)
     neuralNetwork.train(Xtrain, ytrain, maxIter)
 
-    print "SUCCESS"
+    print neuralNetwork.trainError
+    print neuralNetwork.validError
+    print neuralNetwork.testError
+    print neuralNetwork.trainSumL
 
 
 
@@ -119,8 +122,8 @@ def main():
     #exo1234()
     #exo5()
     #exo67()
-    exo8()
-    #exo9_10()
+    #exo8()
+    exo9_10()
 
 if __name__ == '__main__':
     main()

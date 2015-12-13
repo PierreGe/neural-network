@@ -64,7 +64,7 @@ class NeuralNetwork(object):
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
 
     def calculateLoss(self, y):
-        return -(np.log(self._os[y][0]))
+        return -(np.log(self._os[y][0])[0])
 
     def predict(self, x):
         self.fprop(x)
@@ -113,6 +113,8 @@ class NeuralNetwork(object):
 
             born1, born2 = self._nextBatchIndex(X, batchNbr)
 
+            sumL = 0 #Somme des pertes
+
             nbrAverage = 0
             w1update = 0
             w2update = 0
@@ -133,6 +135,8 @@ class NeuralNetwork(object):
                     b1update += self._gradb1
                     b2update += self._gradb2
 
+                    sumL += self.calculateLoss(y) #todo ?????????????
+
             if nbrAverage > 0:
                 self._w1 -= eta * (w1update/nbrAverage)
                 self._w2 -= eta * (w2update/nbrAverage)
@@ -140,6 +144,7 @@ class NeuralNetwork(object):
                 self._b2 -= eta * (b2update/nbrAverage)
 
             self._calculateEfficiency()
+            self.trainSumL.append(sumL)
 
             if not classificationErrorFound:
                 break
@@ -151,9 +156,9 @@ class NeuralNetwork(object):
             predTrain = self.computePredictions(self.Xtrain)
             predValid = self.computePredictions(self.Xvalid)
             predTest = self.computePredictions(self.Xtest)
-            self.trainError.append(1-utils.calculatePredictionsEfficiency(predTrain, self.ytrain))
-            self.validError.append(utils.calculatePredictionsEfficiency(predValid, self.yvalid))
-            self.testError.append(utils.calculatePredictionsEfficiency(predTest, self.ytest))
+            self.trainError.append(100-utils.calculatePredictionsEfficiency(predTrain, self.ytrain))
+            self.validError.append(100-utils.calculatePredictionsEfficiency(predValid, self.yvalid))
+            self.testError.append(100-utils.calculatePredictionsEfficiency(predTest, self.ytest))
 
 if __name__ == '__main__':
     self = NeuralNetwork(4, 6, 3)
