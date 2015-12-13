@@ -164,6 +164,8 @@ def plotRegionsDescision(XTrain, yTrain, XValid, yValid, XTest, yTest, neuralNet
     plt.close()
 
 def plotCourbeApprentissage(train, valid, test, x, title, name):
+    print(x)
+    print(train)
     plt.plot(x, train, label="Train")
     plt.plot(x, valid, label="Validation")
     plt.plot(x, test, label="Test")

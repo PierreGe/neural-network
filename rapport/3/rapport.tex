@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt]{article}
+\documentclass[a4paper,11pt]{article}
 \usepackage[french]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[left=2.5cm,top=2cm,right=2.5cm,nohead,nofoot]{geometry}
@@ -43,9 +43,92 @@
 
 \section{Partie pratique : Implémentation du réseau de neurones}
 
+\subsection{Utilisation}
+
+Pour tester notre programme, executez simplement la commande dans le dossier $src$:
+
+\begin{verbatim}
+	python main.py
+\end{verbatim}
+
+\subsection{Notes relative à l'implémentation}
+
 \subsection{Exercices 1 et 2}
+
+Nous avons implémentée la vérification de gradient par différence finie. Pour chaque scalaire "perturbé", on conserve le ratio dans une liste. Une boucle vérifie ensuite que les ratios sont bien entre 0.99 et 1.01 .Les résultats semblent indiqué que notre implémentation est correcte.
+
+Pour un réseau $ 2 \times 2 \times 2 $, on obtient :
+\begin{verbatim}
+>>EXERCICE 1 et 2
+Liste des ratio W1, b1, W2, b2
+[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.99997500062302613, 1.0000250006249738]
+>Tout les ratio sont bien entre 0.99 et 1.01
+\end{verbatim}
+
 
 \subsection{Exercices 3 et 4	}
 
+On procède comme à l'exercice 1 et 2 sauf qu'on somme l'ensemble des gradients pour K exemples avant de calculer le ratio. Les résultats semblent eux-aussi indiqué que notre implémentation est correcte.
+
+Pour un réseau $ 2 \times 5 \times 2 $, on obtient :
+\begin{verbatim}
+>>EXERCICE 3 et 4
+Liste des ratio W1, b1, W2, b2
+[1, 1, 1.000002072572213, 1.000008244958942, 1, 1, 0.99999469791365814, 0.99997890803949541, 1, 1, 1, 1.0000038768990578, 1, 0.99999008206769824, 1, 1, 0.99998703141629242, 1, 0.99998547642304625, 1, 1, 1.0000129689607908, 1, 1.0000145240579885, 1, 0.99997726119391905, 1.0000227399766273]
+>Tout les ratio sont bien entre 0.99 et 1.01
+\end{verbatim}
+
+\subsection{Exercices 5}
+
+On a ensuite entrainé notre réseau par descente de gradient mini-batch.
+L'entrainement semble un succès.
+
+Les résultats semblent plus on augmente le nombre d'époques et de neurones cachés, plus l'erreur sera petite.
+
+\begin{figure}[H]
+	\includegraphics[width=10cm]{images/exo5-under1.png}
+	\centering
+	\label{fig:comp}
+\end{figure}
+
+
+
+\subsection{Exercices 6 et 7	}
+\subsubsection{Implémentation}
+\todo{Explication des modifs}
+\subsubsection{Verification}
+Pour vérifier que les gradients soient équivalents, on commence par instancier les deux classes correspondant aux deux implémentations $NeuralNetwork$ et $NeuralNetworkEfficient$. On initie ensuite $W1$ et $W2$ des deux classes aux mêmes valeurs. Ensuite on execute l'entrainement pour K=1. On utilise ensuite une méthode qui pour deux réseaux de neurones vérifie que les gradients soient équivalent. On recommence le procédé pour K=10.
+
+Les tests de comparaison nous donne (ok signifie que les deux gradients sont égaux):
+
+\begin{verbatim}
+--- K=1 ---
+Test Ok : gradient b2
+Test Ok : gradient w2
+Test Ok : gradient b1
+Test Ok : gradient w1
+ --- K=10 ---
+Test Ok : gradient b2
+Test Ok : gradient w2
+Test Ok : gradient b1
+Test Ok : gradient w1
+\end{verbatim}
+
+
+\subsection{Exercices 8}
+
+Les résultats des mesures de temps sont les suivant : 
+
+\begin{verbatim}
+>>EXERCICE 8 MNIST
+--- Reseau de depart ---
+Cela a mis : 0.419163 secondes
+--- Reseau optimise ---
+Cela a mis : 0.123445 secondes
+\end{verbatim}
+
+Sur cette exécution, on remarque que le temps d'exécution sur le réseau avec matrice est entre 3 et 4 fois plus rapide que sur le réseau avec boucles. Le gain de performance n'est donc pas négligeable.
+
+\subsection{Exercices 9 et 10}
 
 \end{document}

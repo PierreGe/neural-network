@@ -134,7 +134,7 @@ def exo9_10():
     K = 50
 
     Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMNISTfile()    #todo replace by MNIST
-    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K, wd)
+    neuralNetwork = NeuralNetworkEfficient(len(Xtrain[0]), h, utils.getClassCount(ytrain), K, wd)
     neuralNetwork.setDataSets(Xtrain, Xvalid, Xtest, ytrain, yvalid, ytest)
     neuralNetwork.train(Xtrain, ytrain, maxIter)
 
@@ -148,35 +148,35 @@ def exo9_10():
 
     x = range(1, maxIter+1)
     title = "Taux d'erreur - "+str(maxIter)+" epoques"
-    name = "taux_erreur"
+    name = str(K) + "_" + str(wd)+ "_" + str(h)+ "_" + "taux_erreur"
     utils.plotCourbeApprentissage(neuralNetwork.trainError, neuralNetwork.validError, neuralNetwork.testError, x, title, name)
 
     title = "Cout moyen - "+str(maxIter)+" epoques"
-    name = "cout_moyen"
+    name = str(K) + "_" + str(wd)+ "_" + str(h)+ "_" +"cout_moyen"
     utils.plotCourbeApprentissage(neuralNetwork.trainSumL, neuralNetwork.validSumL, neuralNetwork.testSumL, x, title, name)
 
 
 def test():
 
-    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile()
+    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMNISTfile()
     h = 100
     wd = 0.0001
-    maxIter = 200
+    maxIter = 500
 
-    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=10, wd=wd)
+    # neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=10, wd=wd)
     neuralNetworkEfficient = NeuralNetworkEfficient(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=10, wd=wd)
-    neuralNetworkEfficient._w1 = neuralNetwork._w1
-    neuralNetworkEfficient._w2 = neuralNetwork._w2
-    neuralNetwork.train(Xtrain, ytrain, maxIter)
-    predTrain = neuralNetwork.computePredictions(Xtrain)
-    predValid = neuralNetwork.computePredictions(Xvalid)
-    predTest = neuralNetwork.computePredictions(Xtest)
-    trainEfficiency = utils.calculatePredictionsEfficiency(predTrain, ytrain)
-    validEfficiency = utils.calculatePredictionsEfficiency(predValid, yvalid)
-    testEfficiency = utils.calculatePredictionsEfficiency(predTest, ytest)
-    print( "Train Err: " + "{:.2f}".format(100 - trainEfficiency) + "%" \
-            + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
-            + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%")
+    # neuralNetworkEfficient._w1 = neuralNetwork._w1
+    # neuralNetworkEfficient._w2 = neuralNetwork._w2
+    # neuralNetwork.train(Xtrain, ytrain, maxIter)
+    # predTrain = neuralNetwork.computePredictions(Xtrain)
+    # predValid = neuralNetwork.computePredictions(Xvalid)
+    # predTest = neuralNetwork.computePredictions(Xtest)
+    # trainEfficiency = utils.calculatePredictionsEfficiency(predTrain, ytrain)
+    # validEfficiency = utils.calculatePredictionsEfficiency(predValid, yvalid)
+    # testEfficiency = utils.calculatePredictionsEfficiency(predTest, ytest)
+    # print( "Train Err: " + "{:.2f}".format(100 - trainEfficiency) + "%" \
+    #         + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
+    #         + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%")
 
 
     neuralNetworkEfficient.train(Xtrain, ytrain, maxIter)
@@ -198,7 +198,8 @@ def main():
     #exo5()
     exo67()
     exo8()
-    exo9_10()
+    #exo9_10()
+    test()
 
 if __name__ == '__main__':
     main()
