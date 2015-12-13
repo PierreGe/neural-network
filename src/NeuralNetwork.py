@@ -53,14 +53,13 @@ class NeuralNetwork(object):
 
     def bprop(self, X, y):
         X = np.array([[float(x)] for x in X])
-        self._gradoa = np.array([i[0] for i in self._os]) - utils.onehot(self._m,y)
-        self._gradoa = np.array([[i] for i in self._gradoa]) # obtenir un vecteur colonne
+        self._gradoa = self._os - utils.onehot(self._m,y)
         self._gradb2 = self._gradoa
-        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) + 2 * self.wd * self._w2
+        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) #+ 2 * self.wd * self._w2
         self._gradhs = np.dot(np.transpose(self._w2), self._gradoa)
         self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
         self._gradb1 = np.array(self._gradha)
-        self._gradw1 = np.dot(self._gradha,np.transpose(X)) + 2 * self.wd * self._w1
+        self._gradw1 = np.dot(self._gradha,np.transpose(X)) #+ 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
 
     def calculateLoss(self, y):
@@ -68,13 +67,8 @@ class NeuralNetwork(object):
 
     def predict(self, x):
         self.fprop(x)
-        klass = -1
-        maxVal = -1
 
-        for i in range(len(self._os)):
-            if self._os[i] > maxVal:
-                maxVal = self._os[i]
-                klass = i
+        klass = np.argmax(np.transpose(self._os)[0])
 
         return klass
 
@@ -82,19 +76,20 @@ class NeuralNetwork(object):
         predictions = []
 
         for x in X:
-            predictions.append(self.predict(x))
+            self.fprop(x)
+            predictions.append(np.argmax(np.transpose(self._os)[0]))
 
         return predictions
 
-    def _nextBatchIndex(self, X, batchNbr):
-        correctedBatchNbr = batchNbr % len(X)/self._K
+    def _nextBatchIndex(self, X,y, batchNbr):
+        correctedBatchNbr = batchNbr % int(float(len(X))/self._K)
         size = len(X)
-        born1 = correctedBatchNbr * self._K
-        born2 = (correctedBatchNbr+1) * self._K
+        born1 = int(correctedBatchNbr * self._K + 0.001)
+        born2 = int((correctedBatchNbr+1) * self._K + 0.001)
         if born2 > size:
             born1 = 0
             born2 = self._K
-        return born1, born2
+        return X[born1:born2],y[born1:born2]
 
     def train(self, X, y, maxIter, eta=0.01):
         """
@@ -111,7 +106,8 @@ class NeuralNetwork(object):
             batchNbr+=1
             classificationErrorFound = False
 
-            born1, born2 = self._nextBatchIndex(X, batchNbr)
+
+            xbatch, ybatch = self._nextBatchIndex(X,y, batchNbr)
 
             sumL = 0 #Somme des pertes
 
@@ -120,20 +116,17 @@ class NeuralNetwork(object):
             w2update = 0
             b1update = 0
             b2update = 0
-            for elem in range(born1,born2):
-                prediction = self.predict(X[elem])
+            for elem in range(len(xbatch)):
 
-                if prediction != y[elem]:
-                    classificationErrorFound = True
+                self.fprop(xbatch[elem])
+                self.bprop(xbatch[elem], ybatch[elem])
 
-                    self.fprop(X[elem])
-                    self.bprop(X[elem], y[elem])
 
-                    nbrAverage+=1
-                    w1update += self._gradw1
-                    w2update += self._gradw2
-                    b1update += self._gradb1
-                    b2update += self._gradb2
+                nbrAverage+=1
+                w1update += self._gradw1
+                w2update += self._gradw2
+                b1update += self._gradb1
+                b2update += self._gradb2
 
                     sumL += self.calculateLoss(y) #todo ?????????????
 
@@ -146,8 +139,6 @@ class NeuralNetwork(object):
             self._calculateEfficiency()
             self.trainSumL.append(sumL)
 
-            if not classificationErrorFound:
-                break
 
     def _calculateEfficiency(self):
         if self.Xtrain is None:

@@ -2,22 +2,14 @@
 import utils
 import numpy as np
 
+import NeuralNetwork
 
-class NeuralNetworkEfficient(object):
-    """docstring for NeuralNetwork"""
+
+class NeuralNetworkEfficient(NeuralNetwork.NeuralNetwork):
+    """Optimisation of NeuralNetwork class with method rewrite"""
 
     def __init__(self, d, h, m, K=50, wd=0):
-        self._d = d
-        self._h = h
-        self._m = m
-        self.wd = wd  # weight-decay
-
-        self._w1 = utils.randomArray(d, h, d)  # h x d
-        self._w2 = utils.randomArray(h, m, h)  # m x h
-        self._b1 = np.array([[0.] for i in range(h)])  # h
-        self._b2 = np.array([[0.] for i in range(m)])  # m
-
-        self._K = K #
+        super(NeuralNetworkEfficient, self).__init__(d, h, m, K, wd)
 
     def fprop(self, X):
         X = np.array([np.array([float(x) for x in j]) for j in X])
@@ -26,50 +18,32 @@ class NeuralNetworkEfficient(object):
         self._hs = utils.relu(self._ha)  # valeur hidden
         self._oa = np.dot(self._w2, self._hs) + np.repeat(self._b2, len(X[0]), axis=1)  # valeur entre hidden et sortie
         self._os = utils.softmax(self._oa)  # valeur de sortie
+        #print(self._ha)
 
     def bprop(self, X, y):
-        X = np.array([[float(x)] for x in X])
-        self._gradoa = np.array([i[0] for i in self._os]) - utils.onehot(self._m,y)
-        self._gradoa = np.array([[i] for i in self._gradoa]) # obtenir un vecteur colonne
+        # chaque colonne de X est une entrée
+        X = np.array([np.array([float(x) for x in j]) for j in X])
+        X = X.transpose()
+        self._gradoa = self._os - utils.onehot(self._m,y)
         self._gradb2 = self._gradoa
-        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) + 2 * self.wd * self._w2
+        # gradw2 va être la somme des gradient pour chaque point individuelle
+        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) #+ 2 * self.wd * self._w2
         self._gradhs = np.dot(np.transpose(self._w2), self._gradoa)
         self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
-        self._gradb1 = np.array([i for i in
-                                 self._gradha])
-        self._gradw1 = np.dot(self._gradha,
-                              np.transpose(X)) + 2 * self.wd * self._w1
+        self._gradb1 = np.array(self._gradha)
+        # gradw2 va être la somme des gradient pour chaque point individuelle
+        self._gradw1 = np.dot(self._gradha, np.transpose(X)) #+ 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
 
-    def predict(self, x):
-        self.fprop(x)
-        klass = -1
-        maxVal = -1
-
-        for i in range(len(self._os)):
-            if self._os[i] > maxVal:
-                maxVal = self._os[i]
-                klass = i
-
-        return klass
 
     def computePredictions(self, X):
         predictions = []
-
-        for x in X:
-            predictions.append(self.predict(x))
+        self.fprop(X)
+        for os in np.transpose(self._os):
+            predictions.append(np.argmax(os))
 
         return predictions
 
-    def _nextBatchIndex(self, X, batchNbr):
-        correctedBatchNbr = batchNbr % len(X)/self._K
-        size = len(X)
-        born1 = batchNbr * self._K
-        born2 = (batchNbr+1) * self._K
-        if born2 > size:
-            born1 = 0
-            born2 = self._K
-        return born1, born2
 
     def train(self, X, y, maxIter, eta=0.01):
         """
@@ -86,34 +60,20 @@ class NeuralNetworkEfficient(object):
             batchNbr+=1
             classificationErrorFound = False
 
-            born1, born2 = self._nextBatchIndex(X, batchNbr)
+            xbatch, ybatch = self._nextBatchIndex(X,y, batchNbr)
 
-            nbrAverage = 0
-            w1update = 0
-            w2update = 0
-            b1update = 0
-            b2update = 0
-            for elem in range(born1,born2):
-                nbrAverage+=1
-                prediction = self.predict(X[elem])
+            self.fprop(xbatch)
+            self.bprop(xbatch, ybatch)
 
-                if prediction != y[elem]:
-                    classificationErrorFound = True
-
-                    self.fprop(X[elem])
-                    self.bprop(X[elem], y[elem])
-
-                    w1update += self._gradw1
-                    w2update += self._gradw2
-                    b1update += self._gradb1
-                    b2update += self._gradb2
-
-            self._w1 -= eta * (w1update/nbrAverage)
-            self._w2 -= eta * (w2update/nbrAverage)
-            self._b1 -= eta * (b1update/nbrAverage)
-            self._b2 -= eta * (b2update/nbrAverage)
-            if not classificationErrorFound:
-                break
+            norm = (1. / len(xbatch))
+            self._w1 -= eta * (self._gradw1 * norm)
+            self._w2 -= eta * (self._gradw2 * norm)
+            ub1 = np.sum(self._gradb1, axis=1) * norm
+            self._b1 -= eta * np.array([[i] for i in ub1])
+            ub2 = np.sum(self._gradb2, axis=1) * norm
+            self._b2 -= eta * np.array([[i] for i in ub2])
+            #print(self._gradb1)
+            #print(self._w1,self._w2,self._b1,self._b2)
 
 
 if __name__ == '__main__':

@@ -16,7 +16,16 @@ def softmax(vec):
         for i in matrix:
             v = numpy.array([[j] for j in i])
             res.append(softmax(v))
-        return numpy.array(res)
+
+        res2 = []
+        for colonne in res:
+            temp = []
+            for element in colonne:
+                temp.append(element[0])
+            res2.append(temp)
+        res2 = numpy.array(res2)
+        res2 = numpy.transpose(res2)
+        return res2
 
 
 def uniform(nc):
@@ -38,12 +47,13 @@ def relu(M):
 
 def onehot(m, Y):  # attention le y indice a partir de 0
     try:
-        res = numpy.zeros(m, len(Y))
+        res = numpy.zeros((m, len(Y)))
         for i,y in enumerate(Y):
-            res[i][y] = 1
+            res[y][i] = 1
     except:
         res = numpy.zeros(m)
         res[Y] = 1
+        res = [[i] for i in res] # vecteur colonne
     return res
 
 
@@ -151,3 +161,37 @@ def plotRegionsDescision(XTrain, yTrain, XValid, yValid, XTest, yTest, neuralNet
     plt.savefig(name + ".png")
     print("[Created] file : " + name + ".png")
     plt.close()
+
+
+def compareNN(nn1,nn2, K=1):
+
+    if K>1:
+        ub2 = numpy.sum(nn2._gradb2, axis=1) * K
+        gradb2 = numpy.array([[i] for i in ub2])
+    else:
+        gradb2= nn2._gradb2
+
+    if numpy.array_equal(nn1._gradb2, gradb2):
+        print("Test Ok : gradient b2")
+    else:
+        print("FAIL : gradient b2")
+
+    if numpy.array_equal(nn1._gradw2,nn2._gradw2):
+        print("Test Ok : gradient w2")
+    else:
+        print("FAIL : gradient w2")
+
+    if K>1:
+        ub1 = numpy.sum(nn2._gradb1, axis=1) * K
+        gradb1 = numpy.array([[i] for i in ub1])
+    else:
+        gradb1= nn2._gradb1
+    if numpy.array_equal(nn1._gradb1,gradb1):
+        print("Test Ok : gradient b1")
+    else:
+        print("FAIL : gradient b1")
+
+    if numpy.array_equal(nn1._gradw1,nn2._gradw1):
+        print("Test Ok : gradient w1")
+    else:
+        print("FAIL : gradient w1")
