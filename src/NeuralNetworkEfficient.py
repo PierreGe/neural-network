@@ -27,12 +27,12 @@ class NeuralNetworkEfficient(NeuralNetwork.NeuralNetwork):
         self._gradoa = self._os - utils.onehot(self._m,y)
         self._gradb2 = self._gradoa
         # gradw2 va être la somme des gradient pour chaque point individuelle
-        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) #+ 2 * self.wd * self._w2
+        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) + 2 * self.wd * self._w2
         self._gradhs = np.dot(np.transpose(self._w2), self._gradoa)
         self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
         self._gradb1 = np.array(self._gradha)
         # gradw2 va être la somme des gradient pour chaque point individuelle
-        self._gradw1 = np.dot(self._gradha, np.transpose(X)) #+ 2 * self.wd * self._w1
+        self._gradw1 = np.dot(self._gradha, np.transpose(X)) + 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
 
 
