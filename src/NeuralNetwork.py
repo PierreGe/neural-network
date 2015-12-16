@@ -88,11 +88,15 @@ class NeuralNetwork(object):
         born1 = int(correctedBatchNbr * self._K + 0.001)
         born2 = int((correctedBatchNbr+1) * self._K + 0.001)
         if born2 > size:
-            born1 = 0
-            born2 = self._K
-        return X[born1:born2],y[born1:born2]
+            xbatch = X[born1:size-1]
+            ybatch = y[born1:size-1]
+            xbatch += X[0:size-born1]
+            ybatch += y[0:size-born1]
+        else:
+            xbatch, ybatch = X[born1:born2],y[born1:born2]
+        return xbatch,ybatch
 
-    def train(self, X, y, maxIter, eta=0.01):
+    def train(self, X, y, maxIter, eta=0.05):
         """
         :param X: données d'entrainement
         :param y: classes réelles des données X
@@ -110,10 +114,10 @@ class NeuralNetwork(object):
             xbatch, ybatch = self._nextBatchIndex(X,y, batchNbr)
 
             nbrAverage = 0
-            w1update = 0
-            w2update = 0
-            b1update = 0
-            b2update = 0
+            w1update = np.zeros((self._h, self._d))
+            w2update = np.zeros((self._m, self._h))
+            b1update = np.array([[0.] for i in range(self._h)])
+            b2update = np.array([[0.] for i in range(self._m)])
             for elem in range(len(xbatch)):
 
                 self.fprop(xbatch[elem])
@@ -123,19 +127,19 @@ class NeuralNetwork(object):
                 if prediction != y[elem]:
                     classificationErrorFound = True
 
-                nbrAverage+=1
-                w1update += self._gradw1
-                w2update += self._gradw2
-                b1update += self._gradb1
-                b2update += self._gradb2
+                nbrAverage += 1
+                w1update = np.add(w1update, self._gradw1)
+                w2update = np.add(w2update, self._gradw2)
+                b1update = np.add(b1update, self._gradb1)
+                b2update = np.add(b2update, self._gradb2)
 
             if not classificationErrorFound:
                 break
             elif nbrAverage > 0:
-                self._w1 -= eta * (w1update/nbrAverage)
-                self._w2 -= eta * (w2update/nbrAverage)
-                self._b1 -= eta * (b1update/nbrAverage)
-                self._b2 -= eta * (b2update/nbrAverage)
+                self._w1 = np.add(self._w1, - np.multiply(eta, np.multiply(w1update, 1./nbrAverage)))
+                self._w2 = np.add(self._w2, - np.multiply(eta, np.multiply(w2update, 1./nbrAverage)))
+                self._b1 = np.add(self._b1, - np.multiply(eta, np.multiply(b1update, 1./nbrAverage)))
+                self._b2 = np.add(self._b2, -np.multiply(eta, np.multiply(b2update, 1./nbrAverage)))
 
             #Pour #9-10
             if iter % 10 == 10:
