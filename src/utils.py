@@ -84,6 +84,7 @@ def calculatePredictionsEfficiency(preds, trueVals):
 
 def readMoonFile(validationSizePercent = 15, testSizePercent= 15):
     lines = open("data/2moons.txt").readlines()
+    numpy.random.shuffle(lines)
     X = []
     y = []
     for l in lines:
