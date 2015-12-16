@@ -114,10 +114,10 @@ class NeuralNetwork(object):
             xbatch, ybatch = self._nextBatchIndex(X,y, batchNbr)
 
             nbrAverage = 0
-            w1update = 0
-            w2update = 0
-            b1update = 0
-            b2update = 0
+            w1update = np.zeros((self._h, self._d))
+            w2update = np.zeros((self._m, self._h))
+            b1update = np.array([[0.] for i in range(self._h)])
+            b2update = np.array([[0.] for i in range(self._m)])
             for elem in range(len(xbatch)):
 
                 self.fprop(xbatch[elem])
@@ -127,19 +127,19 @@ class NeuralNetwork(object):
                 if prediction != y[elem]:
                     classificationErrorFound = True
 
-                nbrAverage+=1
-                w1update += self._gradw1
-                w2update += self._gradw2
-                b1update += self._gradb1
-                b2update += self._gradb2
+                nbrAverage += 1
+                w1update = np.add(w1update, self._gradw1)
+                w2update = np.add(w2update, self._gradw2)
+                b1update = np.add(b1update, self._gradb1)
+                b2update = np.add(b2update, self._gradb2)
 
             if not classificationErrorFound:
                 break
             elif nbrAverage > 0:
-                self._w1 -= eta * (w1update/nbrAverage)
-                self._w2 -= eta * (w2update/nbrAverage)
-                self._b1 -= eta * (b1update/nbrAverage)
-                self._b2 -= eta * (b2update/nbrAverage)
+                self._w1 = np.add(self._w1, - np.multiply(eta, np.multiply(w1update, 1./nbrAverage)))
+                self._w2 = np.add(self._w2, - np.multiply(eta, np.multiply(w2update, 1./nbrAverage)))
+                self._b1 = np.add(self._b1, - np.multiply(eta, np.multiply(b1update, 1./nbrAverage)))
+                self._b2 = np.add(self._b2, -np.multiply(eta, np.multiply(b2update, 1./nbrAverage)))
 
             #Pour #9-10
             self._calculateEfficiency()
