@@ -33,7 +33,7 @@ def exo1234():
     np.array(res)).flatten()] else "Echec de la verif..")
 
 def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
-    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=100, wd=wd)
+    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=300, wd=wd)
     neuralNetwork.train(Xtrain, ytrain, maxIter)
     predTrain = neuralNetwork.computePredictions(Xtrain)
     predValid = neuralNetwork.computePredictions(Xvalid)
@@ -46,13 +46,13 @@ def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
             + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
             + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%"
     name = "regions_decision" + str(h) + "_" + str(wd) + "_" + str(maxIter)
-    print("Test efficiency : " + str(testEfficiency))
+    print("Train efficiency : " + str(trainEfficiency))
     utils.plotRegionsDescision(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, neuralNetwork, title, name,hparams)
 
 def exo5():
 
     print("\n\n>>EXERCICE 5 Entrainement du reseau de neuronne + Variation des hyper-parametres")
-    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile()
+    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile(5,5)
 
     sample_h = [2, 20, 100]
     sample_wd = [0, 0.0001, 0.01]
@@ -186,7 +186,7 @@ def test():
 
 
 def main():
-    #np.random.seed(123)
+    np.random.seed(123)
     #exo1234()
     #exo67()
     #exo8

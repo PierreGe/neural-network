@@ -123,19 +123,13 @@ class NeuralNetwork(object):
                 self.fprop(xbatch[elem])
                 self.bprop(xbatch[elem], ybatch[elem])
 
-                prediction = self.predict(xbatch[elem])
-                if prediction != y[elem]:
-                    classificationErrorFound = True
-
                 nbrAverage += 1
                 w1update = np.add(w1update, self._gradw1)
                 w2update = np.add(w2update, self._gradw2)
                 b1update = np.add(b1update, self._gradb1)
                 b2update = np.add(b2update, self._gradb2)
 
-            if not classificationErrorFound:
-                break
-            elif nbrAverage > 0:
+            if nbrAverage > 0:
                 self._w1 = np.add(self._w1, - np.multiply(eta, np.multiply(w1update, 1./nbrAverage)))
                 self._w2 = np.add(self._w2, - np.multiply(eta, np.multiply(w2update, 1./nbrAverage)))
                 self._b1 = np.add(self._b1, - np.multiply(eta, np.multiply(b1update, 1./nbrAverage)))
