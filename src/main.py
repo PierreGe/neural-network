@@ -121,10 +121,10 @@ def exo9_10():
 
     h = 30
     wd = 0.0001
-    maxIter = 15
+    maxIter = 200
     K = 50
 
-    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMNISTfile()    #todo replace by MNIST
+    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMNISTfile()
     neuralNetwork = NeuralNetworkEfficient(len(Xtrain[0]), h, utils.getClassCount(ytrain), K, wd)
     neuralNetwork.setDataSets(Xtrain, Xvalid, Xtest, ytrain, yvalid, ytest)
     neuralNetwork.train(Xtrain, ytrain, maxIter)
@@ -137,13 +137,13 @@ def exo9_10():
     f.write(epochsData)
     f.close()
 
-    x = range(1, maxIter+1)
+    x = range(1, maxIter+1, 10)
     title = "Taux d'erreur - "+str(maxIter)+" epoques"
-    name = str(K) + "_" + str(wd)+ "_" + str(h)+ "_" + "taux_erreur"
+    name = str(h) + "_" + str(wd)+ "_" + str(h)+ "_" + "taux_erreur"
     utils.plotCourbeApprentissage(neuralNetwork.trainError, neuralNetwork.validError, neuralNetwork.testError, x, title, name)
 
     title = "Cout moyen - "+str(maxIter)+" epoques"
-    name = str(K) + "_" + str(wd)+ "_" + str(h)+ "_" +"cout_moyen"
+    name = str(h) + "_" + str(wd)+ "_" + str(h)+ "_" +"cout_moyen"
     utils.plotCourbeApprentissage(neuralNetwork.trainSumL, neuralNetwork.validSumL, neuralNetwork.testSumL, x, title, name)
 
 
@@ -190,8 +190,8 @@ def main():
     #exo67()
     #exo8
     #exo5()
-    #exo9_10()
-    test()
+    exo9_10()
+    #test()
 
 if __name__ == '__main__':
     main()

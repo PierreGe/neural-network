@@ -45,7 +45,7 @@ class NeuralNetworkEfficient(NeuralNetwork.NeuralNetwork):
         return predictions
 
 
-    def train(self, X, y, maxIter, eta=0.01):
+    def train(self, X, y, maxIter, eta=0.05):
         """
         :param X: données d'entrainement
         :param y: classes réelles des données X
@@ -74,8 +74,14 @@ class NeuralNetworkEfficient(NeuralNetwork.NeuralNetwork):
             self._b2 -= eta * np.array([[i] for i in ub2])
             #print(self._gradb1)
             #print(self._w1,self._w2,self._b1,self._b2)
-            self._calculateEfficiency()
-            self._calculateAverageCosts()
+
+             #Pour #9-10
+            if iter % 10 == 0:
+                self._calculateEfficiency()
+                self._calculateAverageCosts()
+
+                if len(self.epochData) > 0:
+                    print self.epochData[len(self.epochData)-1]+" ("+str(iter)+")"
 
     def calculateLoss(self, Y):
         res = 0

@@ -138,10 +138,12 @@ class NeuralNetwork(object):
                 self._b2 -= eta * (b2update/nbrAverage)
 
             #Pour #9-10
-            self._calculateEfficiency()
-            self._calculateAverageCosts()
-            #print self.epochData[len(self.epochData)-1]
+            if iter % 10 == 10:
+                self._calculateEfficiency()
+                self._calculateAverageCosts()
 
+            if len(self.epochData) > 0:
+                print self.epochData[len(self.epochData)-1]
 
     def _calculateEfficiency(self):
         if self.Xtrain is None:
