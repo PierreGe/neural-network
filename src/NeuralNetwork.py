@@ -88,11 +88,15 @@ class NeuralNetwork(object):
         born1 = int(correctedBatchNbr * self._K + 0.001)
         born2 = int((correctedBatchNbr+1) * self._K + 0.001)
         if born2 > size:
-            born1 = 0
-            born2 = self._K
-        return X[born1:born2],y[born1:born2]
+            xbatch = X[born1:size-1]
+            ybatch = y[born1:size-1]
+            xbatch += X[0:size-born1]
+            ybatch += y[0:size-born1]
+        else:
+            xbatch, ybatch = X[born1:born2],y[born1:born2]
+        return xbatch,ybatch
 
-    def train(self, X, y, maxIter, eta=0.01):
+    def train(self, X, y, maxIter, eta=0.05):
         """
         :param X: données d'entrainement
         :param y: classes réelles des données X

@@ -33,7 +33,7 @@ def exo1234():
     np.array(res)).flatten()] else "Echec de la verif..")
 
 def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
-    neuralNetwork = NeuralNetworkEfficient(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=50, wd=wd)
+    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=100, wd=wd)
     neuralNetwork.train(Xtrain, ytrain, maxIter)
     predTrain = neuralNetwork.computePredictions(Xtrain)
     predValid = neuralNetwork.computePredictions(Xvalid)
@@ -46,6 +46,7 @@ def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
             + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
             + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%"
     name = "regions_decision" + str(h) + "_" + str(wd) + "_" + str(maxIter)
+    print("Test efficiency : " + str(testEfficiency))
     utils.plotRegionsDescision(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, neuralNetwork, title, name,hparams)
 
 def exo5():
@@ -55,7 +56,7 @@ def exo5():
 
     sample_h = [2, 20, 100]
     sample_wd = [0, 0.0001, 0.01]
-    sample_maxIter = [2, 50, 200, 500]
+    sample_maxIter = [2, 50, 100, 200]
 
     for h in sample_h:
         for wd in sample_wd:
@@ -189,9 +190,9 @@ def main():
     #exo1234()
     #exo67()
     #exo8
-    #exo5()
+    exo5()
     #exo9_10()
-    test()
+    #test()
 
 if __name__ == '__main__':
     main()
