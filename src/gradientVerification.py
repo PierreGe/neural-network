@@ -2,7 +2,7 @@ import utils
 import numpy as np
 
 from NeuralNetwork import NeuralNetwork
-
+# Mathieu Bouchard && Pierre Gerard
 
 def verifW1(neuralNetwork, X, y, sigma):
     # perte sur ces donnees pour w1

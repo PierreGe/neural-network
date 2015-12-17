@@ -1,8 +1,7 @@
 import numpy
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 import gzip, pickle
-
+# Mathieu Bouchard && Pierre Gerard
 
 def softmax(vec):
     """ ok"""
