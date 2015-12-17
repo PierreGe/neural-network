@@ -132,9 +132,19 @@ Cela de même pour y.
 
 \subsubsection{fprop}
 
-On cherche a obtenir une matrice du même format que l'input. C'est a dire une matrice ou la colonne i correspond au sortie pour la colonne i de la matrice X.
-\todo{ici}
 
+On cherche a obtenir une matrice pour la sortie du même format que l'input. C'est a dire une matrice ou la colonne i correspond aux sorties pour la colonne i de la matrice X.
+
+Il a été nécessaire de modifier la fonction relu et softmax pour qu'elles acceptent des matrices.
+
+Ensuite, il n'a pas fallu modifier w1, w2, b1 ou bien b2.
+
+En effet lorsqu'on multiplie la transposé de X par w1, au lieu d'obtenir un vecteur colonne comme avant, on obtient une matrice de K vecteur colonne. Il suffit de rajouter b1 a chaque colonne ensuite.
+
+Cela de même pour oa, au lieu d'obtenir un vecteur colonne, on obtient la matrice des K vecteurs colonnes.
+
+
+Il suffit ensuite d'appliquer le softmax modifier pour accepter la matrice.
 \subsubsection{bprop}
 
 \todo{ici}

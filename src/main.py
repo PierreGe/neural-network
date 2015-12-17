@@ -190,8 +190,8 @@ def main():
     #exo1234()
     #exo67()
     #exo8
-    exo5()
-    #exo9_10()
+    #exo5()
+    exo9_10()
     #test()
 
 if __name__ == '__main__':
