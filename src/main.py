@@ -33,7 +33,7 @@ def exo1234():
     np.array(res)).flatten()] else "Echec de la verif..")
 
 def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
-    neuralNetwork = NeuralNetwork(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=300, wd=wd)
+    neuralNetwork = NeuralNetworkEfficient(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=300, wd=wd)
     neuralNetwork.train(Xtrain, ytrain, maxIter)
     predTrain = neuralNetwork.computePredictions(Xtrain)
     predValid = neuralNetwork.computePredictions(Xvalid)

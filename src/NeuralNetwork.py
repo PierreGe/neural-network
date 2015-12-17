@@ -47,20 +47,20 @@ class NeuralNetwork(object):
 
     def fprop(self, X):
         X = np.array([[float(x)] for x in X])
-        self._ha = np.dot(self._w1, X) + self._b1  # valeur des synapses entre x et hidden
+        self._ha = np.add(np.dot(self._w1, X), self._b1) # valeur des synapses entre x et hidden
         self._hs = utils.relu(self._ha)  # valeur hidden
-        self._oa = np.dot(self._w2, self._hs) + self._b2  # valeur entre hidden et sortie
+        self._oa = np.add(np.dot(self._w2, self._hs), self._b2)  # valeur entre hidden et sortie
         self._os = utils.softmax(self._oa)  # valeur de sortie
 
     def bprop(self, X, y):
         X = np.array([[float(x)] for x in X])
-        self._gradoa = self._os - utils.onehot(self._m,y)
+        self._gradoa = np.subtract(self._os, utils.onehot(self._m,y))
         self._gradb2 = self._gradoa
-        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) + 2 * self.wd * self._w2
+        self._gradw2 = np.add(np.dot(self._gradoa, np.transpose(self._hs)), 2 * self.wd * self._w2)
         self._gradhs = np.dot(np.transpose(self._w2), self._gradoa)
         self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
         self._gradb1 = np.array(self._gradha)
-        self._gradw1 = np.dot(self._gradha,np.transpose(X)) + 2 * self.wd * self._w1
+        self._gradw1 = np.add(np.dot(self._gradha,np.transpose(X)), 2 * self.wd * self._w1)
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
 
     def calculateLoss(self, y):
