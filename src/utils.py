@@ -1,8 +1,7 @@
 import numpy
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 import gzip, pickle
-
+# Mathieu Bouchard && Pierre Gerard
 
 def softmax(vec):
     """ ok"""
@@ -84,7 +83,6 @@ def calculatePredictionsEfficiency(preds, trueVals):
 
 def readMoonFile(validationSizePercent = 15, testSizePercent= 15):
     lines = open("data/2moons.txt").readlines()
-    numpy.random.shuffle(lines)
     X = []
     y = []
     for l in lines:

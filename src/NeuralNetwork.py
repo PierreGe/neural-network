@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import utils
 import numpy as np
-
+# Mathieu Bouchard && Pierre Gerard
 
 class NeuralNetwork(object):
     """docstring for NeuralNetwork"""
@@ -47,20 +47,20 @@ class NeuralNetwork(object):
 
     def fprop(self, X):
         X = np.array([[float(x)] for x in X])
-        self._ha = np.add(np.dot(self._w1, X), self._b1) # valeur des synapses entre x et hidden
+        self._ha = np.dot(self._w1, X) + self._b1  # valeur des synapses entre x et hidden
         self._hs = utils.relu(self._ha)  # valeur hidden
-        self._oa = np.add(np.dot(self._w2, self._hs), self._b2)  # valeur entre hidden et sortie
+        self._oa = np.dot(self._w2, self._hs) + self._b2  # valeur entre hidden et sortie
         self._os = utils.softmax(self._oa)  # valeur de sortie
 
     def bprop(self, X, y):
         X = np.array([[float(x)] for x in X])
-        self._gradoa = np.subtract(self._os, utils.onehot(self._m,y))
+        self._gradoa = self._os - utils.onehot(self._m,y)
         self._gradb2 = self._gradoa
-        self._gradw2 = np.add(np.dot(self._gradoa, np.transpose(self._hs)), 2 * self.wd * self._w2)
+        self._gradw2 = np.dot(self._gradoa, np.transpose(self._hs)) + 2 * self.wd * self._w2
         self._gradhs = np.dot(np.transpose(self._w2), self._gradoa)
         self._gradha = self._gradhs * np.where(self._ha > 0, 1, 0)
         self._gradb1 = np.array(self._gradha)
-        self._gradw1 = np.add(np.dot(self._gradha,np.transpose(X)), 2 * self.wd * self._w1)
+        self._gradw1 = np.dot(self._gradha,np.transpose(X)) + 2 * self.wd * self._w1
         self._gradx = np.dot(np.transpose(self._w1), self._gradha)
 
     def calculateLoss(self, y):
@@ -88,15 +88,11 @@ class NeuralNetwork(object):
         born1 = int(correctedBatchNbr * self._K + 0.001)
         born2 = int((correctedBatchNbr+1) * self._K + 0.001)
         if born2 > size:
-            xbatch = X[born1:size-1]
-            ybatch = y[born1:size-1]
-            xbatch += X[0:size-born1]
-            ybatch += y[0:size-born1]
-        else:
-            xbatch, ybatch = X[born1:born2],y[born1:born2]
-        return xbatch,ybatch
+            born1 = 0
+            born2 = self._K
+        return X[born1:born2],y[born1:born2]
 
-    def train(self, X, y, maxIter, eta=0.05):
+    def train(self, X, y, maxIter, eta=0.01):
         """
         :param X: données d'entrainement
         :param y: classes réelles des données X
@@ -114,26 +110,32 @@ class NeuralNetwork(object):
             xbatch, ybatch = self._nextBatchIndex(X,y, batchNbr)
 
             nbrAverage = 0
-            w1update = np.zeros((self._h, self._d))
-            w2update = np.zeros((self._m, self._h))
-            b1update = np.array([[0.] for i in range(self._h)])
-            b2update = np.array([[0.] for i in range(self._m)])
+            w1update = 0
+            w2update = 0
+            b1update = 0
+            b2update = 0
             for elem in range(len(xbatch)):
 
                 self.fprop(xbatch[elem])
                 self.bprop(xbatch[elem], ybatch[elem])
 
-                nbrAverage += 1
-                w1update = np.add(w1update, self._gradw1)
-                w2update = np.add(w2update, self._gradw2)
-                b1update = np.add(b1update, self._gradb1)
-                b2update = np.add(b2update, self._gradb2)
+                prediction = self.predict(xbatch[elem])
+                if prediction != y[elem]:
+                    classificationErrorFound = True
 
-            if nbrAverage > 0:
-                self._w1 = np.add(self._w1, - np.multiply(eta, np.multiply(w1update, 1./nbrAverage)))
-                self._w2 = np.add(self._w2, - np.multiply(eta, np.multiply(w2update, 1./nbrAverage)))
-                self._b1 = np.add(self._b1, - np.multiply(eta, np.multiply(b1update, 1./nbrAverage)))
-                self._b2 = np.add(self._b2, -np.multiply(eta, np.multiply(b2update, 1./nbrAverage)))
+                nbrAverage+=1
+                w1update += self._gradw1
+                w2update += self._gradw2
+                b1update += self._gradb1
+                b2update += self._gradb2
+
+            if not classificationErrorFound:
+                break
+            elif nbrAverage > 0:
+                self._w1 -= eta * (w1update/nbrAverage)
+                self._w2 -= eta * (w2update/nbrAverage)
+                self._b1 -= eta * (b1update/nbrAverage)
+                self._b2 -= eta * (b2update/nbrAverage)
 
             #Pour #9-10
             if iter % 10 == 10:

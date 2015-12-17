@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# Mathieu Bouchard && Pierre Gerard
 
 from NeuralNetwork import NeuralNetwork
 from NeuralNetworkEfficient import NeuralNetworkEfficient
@@ -33,7 +34,7 @@ def exo1234():
     np.array(res)).flatten()] else "Echec de la verif..")
 
 def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
-    neuralNetwork = NeuralNetworkEfficient(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=300, wd=wd)
+    neuralNetwork = NeuralNetworkEfficient(len(Xtrain[0]), h, utils.getClassCount(ytrain), K=50, wd=wd)
     neuralNetwork.train(Xtrain, ytrain, maxIter)
     predTrain = neuralNetwork.computePredictions(Xtrain)
     predValid = neuralNetwork.computePredictions(Xvalid)
@@ -46,17 +47,16 @@ def trainAndPrint(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, h, wd, maxIter):
             + " / Valid Err: " + "{:.2f}".format(100 - validEfficiency) + "%" \
             + " / Test Err: " + "{:.2f}".format(100 - testEfficiency) + "%"
     name = "regions_decision" + str(h) + "_" + str(wd) + "_" + str(maxIter)
-    print("Train efficiency : " + str(trainEfficiency))
     utils.plotRegionsDescision(Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest, neuralNetwork, title, name,hparams)
 
 def exo5():
 
     print("\n\n>>EXERCICE 5 Entrainement du reseau de neuronne + Variation des hyper-parametres")
-    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile(5,5)
+    Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMoonFile()
 
     sample_h = [2, 20, 100]
     sample_wd = [0, 0.0001, 0.01]
-    sample_maxIter = [2, 50, 100, 200]
+    sample_maxIter = [2, 50, 200, 500]
 
     for h in sample_h:
         for wd in sample_wd:
@@ -120,9 +120,9 @@ def exo9_10():
     print("\n\n>>EXERCICE 9-10")
     print("Train Err;Valid Err;Test Err;Avg Cost Train;Avg Cost Valid;Avg Cost Test")
 
-    h = 30
+    h = 300
     wd = 0.0001
-    maxIter = 200
+    maxIter = 500
     K = 50
 
     Xtrain, ytrain, Xvalid, yvalid, Xtest, ytest = utils.readMNISTfile()
@@ -186,7 +186,7 @@ def test():
 
 
 def main():
-    np.random.seed(123)
+    #np.random.seed(123)
     #exo1234()
     #exo67()
     #exo8
