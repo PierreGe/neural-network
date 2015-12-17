@@ -51,7 +51,7 @@ Pour tester notre programme, exécutez simplement la commande dans le dossier $s
 	python main.py
 \end{verbatim}
 
-Les exercice 5 et 9/10 s'exécutent en dernier car ils prennent le plus de temps.
+Les exercice 5 et 9/10 s'exécutent en dernier car ils prennent le plus de temps. Il faut compter quelques secondes pour les premiers exercices, 10 min pour le 5 et quelques dizaines de minutes pour le 9 et 10.
 \subsection{Notes relative à l'implémentation}
 
 \subsection{Exercices 1 et 2}
@@ -66,6 +66,7 @@ Liste des ratio W1, b1, W2, b2
 >Tout les ratio sont bien entre 0.99 et 1.01
 \end{verbatim}
 
+Note : Lorsque des valeurs de w1 ou w2 seraient générés aléatoirement à 0, le ratio peut ne pas être dans l'interval. Cela ne devrait pas se produire lors de l'exécution du programme car un seed à été passé au générateur de nombre aléatoire.
 
 \subsection{Exercices 3 et 4	}
 
@@ -83,8 +84,13 @@ Liste des ratio W1, b1, W2, b2
 
 On a ensuite entrainé notre réseau par descente de gradient mini-batch.
 L'entrainement semble un succès.
+Les résultats semblent montré que plus on augmente le nombre d'époques et de neurones cachés, plus l'erreur sera petite.
 
-Les résultats semblent plus on augmente le nombre d'époques et de neurones cachés, plus l'erreur sera petite.
+\subsubsection{Exemple de résultat}
+
+
+Voici notre meilleur résultat en exemple :
+Ici nous n'avons considéré que un ensemble d'entrainement contenant tous les points.
 
 \begin{figure}[H]
 	\includegraphics[width=10cm]{images/exo5-under1.png}
@@ -180,7 +186,7 @@ Cela a mis : 0.419163 secondes
 Cela a mis : 0.123445 secondes
 \end{verbatim}
 
-Sur cette exécution, on remarque que le temps d'exécution sur le réseau avec matrice est entre 3 et 4 fois plus rapide que sur le réseau avec boucles. Le gain de performance n'est donc pas négligeable.
+Sur cette exécution, on remarque que le temps d'exécution sur le réseau avec matrice est entre 3 et 4 fois plus rapide que sur le réseau avec boucles. Le gain de performance n'est donc pas négligeable. Si on essaye d'autres exécutions, on remarque des résultats similaires.
 
 \subsection{Exercices 9 et 10}
 
