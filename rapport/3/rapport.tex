@@ -89,16 +89,33 @@ Les résultats semblent montré que plus on augmente le nombre d'époques et de 
 \subsubsection{Exemple de résultat}
 
 
-Voici notre meilleur résultat en exemple :
+Voici notre meilleur résultat sur l'ensemble d'entrainement :
+
 Ici nous n'avons considéré que un ensemble d'entrainement contenant tous les points.
 
 \begin{figure}[H]
-	\includegraphics[width=10cm]{images/exo5-under1.png}
+	\includegraphics[width=14cm]{images/exo5-under1.png}
+	\centering
+	\label{fig:comp}
+\end{figure}
+
+En divisant l'ensemble en 3 ensembles : entrainement, validation et test et pour d'autres valeurs d'hyper-paramètre, on obtient :
+
+Ici nous avons mis beaucoup d'itération de manière a obtenir un bon résultat. Les batch ont une taille de 50.
+\begin{figure}[H]
+	\includegraphics[width=14cm]{images/exo5-ideal.png}
 	\centering
 	\label{fig:comp}
 \end{figure}
 
 
+Un dernier exemple pour de mauvaises valeurs. Ici on a délibérément choisit de mauvais hyper-paramètre : seulement 2 neurones cachés et deux itérations. Les erreurs sont élevées.
+
+\begin{figure}[H]
+	\includegraphics[width=14cm]{images/exo5-mauvaishyper.png}
+	\centering
+	\label{fig:comp}
+\end{figure}
 
 \subsection{Exercices 6 et 7	}
 \subsection{Input}
@@ -176,7 +193,7 @@ Test Ok : gradient w1
 
 \subsection{Exercices 8}
 
-Les résultats des mesures de temps sont les suivant : 
+Les résultats des mesures de temps pour une exécution sont les suivant : 
 
 \begin{verbatim}
 >>EXERCICE 8 MNIST
