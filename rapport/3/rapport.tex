@@ -132,7 +132,6 @@ Cela de même pour y.
 
 \subsubsection{fprop}
 
-
 On cherche a obtenir une matrice pour la sortie du même format que l'input. C'est a dire une matrice ou la colonne i correspond aux sorties pour la colonne i de la matrice X.
 
 Il a été nécessaire de modifier la fonction relu et softmax pour qu'elles acceptent des matrices.
@@ -147,7 +146,15 @@ Cela de même pour oa, au lieu d'obtenir un vecteur colonne, on obtient la matri
 Il suffit ensuite d'appliquer le softmax modifier pour accepter la matrice.
 \subsubsection{bprop}
 
-\todo{ici}
+On cherche a obtenir les 4 gradients  w1, w2, b1 b2.
+
+Il a été nécessaire de modifier la fonction onehot pour qu'elle accepte un vecteur de classe de sortie et renvoie la matrice correspondante.
+
+Le gradient gradb2 sera une matrice dont les colonnes seront les gradient b2 pour chaque exemple car il est égale a gradoa qui lui même est la soustraction des résultats de fprop par onehot.
+
+Le gradient w2 quant a lui aura la même dimension que avant. Cependant ce sera la somme des gradients individuels. Avant on avait un produit matriciel qui faisait un element de oa pour un element de hs, maintenant on a la somme des produits d'une ligne de oa par une colonne de hs et cela correspond a la somme des gradients individuels.
+
+C'est ensuite le même principe pour les autres matrices.
 
 \subsubsection{Verification des modifications}
 Pour cette question, on a écrit une méthode qui pour deux réseaux de neurones vérifie que les gradients soient équivalent. C'est a dire qui va regardé pour deux classe NeuralNetwork que les quatre attributs de classes (gradw1, gradw2, gradb1, gradb2) sont égales. Il faut bien sur initialiser les matrices w1 et w2 à des mêmes valeurs.
