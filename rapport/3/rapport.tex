@@ -117,6 +117,19 @@ Un dernier exemple pour de mauvaises valeurs. Ici on a délibérément choisit d
 	\label{fig:comp}
 \end{figure}
 
+\subsubsection{Géréralisation}
+
+D'après les résultats obtenus en faisant varier les résultats des hyper-paramètres, voici leurs influences :
+
+\begin{itemize}
+	\item Les hyper-paramètres $theta$ et $weightDecay$ font varier la vitesse l'algorithme converge. Pour des résultats consistant entre plusieurs exécutions et si possible d'un point de vue computationnel, il vaut mieux les garder petit et augmenter le nombre d'itération
+	\item Il semblerait que augmenter l'hyper-paramètre K fait converger l'algorithme vers un bon résultat plus rapidement.
+	\item Le nombre de neurone caché semble avoir une influence sur les résultats, il vaut mieux en avoir un grand nombre mais à partir d'un moment, augmenter le nombre ne diminue plus le taux d'erreur.
+	\item Le nombre d'itération semble être le paramètre le plus important. Plus il augmente, plus on a de chance de se retrouver avec un bon résultat et des erreurs très petite.
+\end{itemize}
+
+
+
 \subsection{Exercices 6 et 7	}
 \subsection{Input}
 
