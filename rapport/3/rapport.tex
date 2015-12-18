@@ -255,7 +255,9 @@ On retrouve alors dans l'ordre les 3 valeurs d'erreur de classification (train, 
 
 \newpage
 
-Nous avons obtenus des résultats optimaux lorsque nos hyper-paramètres avaient les valeurs suivantes:
+\subsection{Nombre d'itération petit}
+
+Nous avons obtenus les résultats suivant lorsque nos hyper-paramètres avaient les valeurs suivantes:
 
 \begin{verbatim}
 h = 30
@@ -277,5 +279,39 @@ On obtient alors les résultats suivants:
 	\centering
 	\label{fig:comp}
 \end{figure}
+
+\subsection{En dessous de 5 pourcent : grand nombre d'itération}
+
+Nous avons obtenus les résultat suivant avec un grand nombre d'itération 
+\begin{itemize}
+	\item Erreur d'entrainement : 4.762\%
+	\item Erreur de validation : 4.510\%
+	\item Erreur de test : 4.850\%
+\end{itemize}
+
+Les hyper-paramètres avaient les valeurs suivantes:
+
+\begin{verbatim}
+h = 400
+wd = 0.0001
+maxIter = 4000
+K = 50
+\end{verbatim}
+
+Et les graphiques sont les suivants :
+
+\begin{figure}[H]
+	\includegraphics[width=15cm]{images/five_taux_erreur.png}
+	\centering
+	\label{fig:comp}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics[width=15cm]{images/five_cout_moyen.png}
+	\centering
+	\label{fig:comp}
+\end{figure}
+
+Ces résultats en dessous de 5\% auraient pu être établis avec moins d'itération en modifiant les hyper-paramètres qui définissent la vitesse de convergence.
 
 \end{document}
